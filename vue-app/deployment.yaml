@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: vue-app
+  namespace: curator
+spec:
+  selector:
+    app: vue-app
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: ClusterIP
+  # Set the fixed port for the LoadBalancer service
+  # loadBalancerIP: <your-external-IP>
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vue-app
+  namespace: curator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vue-app
+  template:
+    metadata:
+      labels:
+        app: vue-app
+    spec:
+      containers:
+        - name: vue-app
+          image: atemndobs/music-player:v1.1
+          command: ["sh", "-c", "npm run serve"]
+          ports:
+            - containerPort: 8080
+          imagePullPolicy: Always
