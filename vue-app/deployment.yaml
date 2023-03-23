@@ -11,7 +11,7 @@ spec:
       protocol: TCP
       port: 8080
       targetPort: 8080
-  type: ClusterIP
+  type: LoadBalancer
   # Set the fixed port for the LoadBalancer service
   # loadBalancerIP: <your-external-IP>
 
