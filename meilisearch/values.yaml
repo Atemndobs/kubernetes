@@ -37,15 +37,16 @@ podDisruptionBudget: {}
 
 ## Environment variables to pass to meilisearch
 # All the possible congifurations possible are available here: https://docs.meilisearch.com/guides/advanced_guides/configuration.html
-env: {}
-  # MEILI_HTTP_ADDR: "
-#  - name: MEILI_ENV
-#    value: "kubernetes"
-#  - name: MEILI_MASTER_KEY
-#    valueFrom:
-#      secretKeyRef:
-#        name: meilisearch
-#        key: meili_key
+env:
+  # MEILI_HTTP_ADDR:
+  - name: MEILI_ENV
+    value: "kubernetes"
+  - name: MEILI_MASTER_KEY
+    valueFrom:
+      secretKeyRef:
+        name: meilisearch
+        key: meili_key
+        value: "masterKey"
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -69,7 +70,7 @@ securityContext: {}
   # runAsUser: 1000
 
 service:
-  type: ClusterIP
+  type: LoadBalancer
   port: 7700
   portName: http
   annotations: {}
