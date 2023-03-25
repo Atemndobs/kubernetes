@@ -1,5 +1,5 @@
 apiVersion: v2
-appVersion: v0.27.2
+appVersion: v1.0
 description: Meilisearch is an open source, blazingly fast and hyper relevant search-engine that will improve your search experience.
 home: https://github.com/meilisearch/meilisearch
 keywords:

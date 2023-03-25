@@ -13,7 +13,7 @@ imagePullSecrets: []
 name: meilisearch
 
 image:
-  repository: getmeili/meilisearch:v1.0
+  repository: getmeili/meilisearch
   tag: ""
   pullPolicy: IfNotPresent
 
