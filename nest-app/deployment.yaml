@@ -38,7 +38,7 @@ spec:
     spec:
       containers:
       - name: nest-app
-        image: atemndobs/nestjs_api_prod:v2.1.0
+        image: atemndobs/nestjs_api_prod:v2.1.1
         command: ["sh", "-c", "pm2 start dist/main.js --name nest --no-daemon && pm2 logs nest"]
         ports:
         - containerPort: 3000

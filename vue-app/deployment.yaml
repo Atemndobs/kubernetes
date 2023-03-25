@@ -33,7 +33,7 @@ spec:
     spec:
       containers:
         - name: vue-app
-          image: atemndobs/music-player:v1.2
+          image: atemndobs/music-player:v1.3
           command: ["sh", "-c", "npm run serve"]
           ports:
             - containerPort: 8080
