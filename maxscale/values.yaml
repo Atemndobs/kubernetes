@@ -3,11 +3,11 @@
 # Declare variables to be passed into your templates.
 
 # -- IP or Hostname of the 1. Galera node
-db1Address: db1.example.com
+db1Address: mariadb-galera-0
 # -- IP or Hostname of the 2. Galera node
-db2Address: db2.example.com
+db2Address: mariadb-galera-1
 # -- IP or Hostname of the 3. Galera node
-db3Address: db3.example.com
+db3Address: mariadb-galera-2
 # -- MaxScale service user name
 serviceUser: maxscale
 # -- MaxScale service user password
