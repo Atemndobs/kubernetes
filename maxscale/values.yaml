@@ -71,7 +71,7 @@ containerSecurityContext:
   runAsUser: 998
   readOnlyRootFilesystem: true
 
-podDisruptionBudget: true
+podDisruptionBudget: false
 
 mariadb:
   replicaCount: 3
@@ -93,7 +93,7 @@ mariadb:
     - name: MARIADB_EXTRA_FLAGS
       value: --skip-log-bin
   metrics:
-    enabled: true
+    enabled: false
     serviceMonitor:
       enabled: true
       selector: false
