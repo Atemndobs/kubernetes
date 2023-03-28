@@ -77,14 +77,14 @@ mariadb:
   replicaCount: 3
   rootUser:
     forcePassword: true
-    password: "CHANGEME"
+    password: "mage"
   db:
     forcePassword: true
-    password: "CHANGEME"
+    password: "mage"
   galera:
     mariabackup:
       forcePassword: true
-      password: "CHANGEME"
+      password: "mage"
   podDisruptionBudget:
     create: true
     minAvailable: 2
