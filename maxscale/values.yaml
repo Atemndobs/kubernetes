@@ -16,7 +16,6 @@ image:
   registry: docker.io
   repository: mariadb/maxscale
   tag: 22.08.4
- # tag: 23.02
 
 replicas: 2
 enterpriseLicensed: false
@@ -72,29 +71,29 @@ containerSecurityContext:
   runAsUser: 998
   readOnlyRootFilesystem: true
 
-podDisruptionBudget: false
+podDisruptionBudget: true
 
 mariadb:
   replicaCount: 3
   rootUser:
     forcePassword: true
-    password: "mage"
+    password: "CHANGEME"
   db:
     forcePassword: true
-    password: "mage"
+    password: "CHANGEME"
   galera:
     mariabackup:
-      forcePassword: false
-      password: ""
+      forcePassword: true
+      password: "CHANGEME"
   podDisruptionBudget:
-    create: false
+    create: true
     minAvailable: 2
   podAntiAffinityPreset: hard
   extraEnvVars:
     - name: MARIADB_EXTRA_FLAGS
       value: --skip-log-bin
   metrics:
-    enabled: fase
+    enabled: true
     serviceMonitor:
       enabled: true
       selector: false
