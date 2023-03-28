@@ -17,7 +17,7 @@ image:
   repository: mariadb/maxscale
   tag: 22.08.4
 
-replicas: 2
+replicas: 1
 enterpriseLicensed: false
 
 hpa:
@@ -86,7 +86,7 @@ mariadb:
       forcePassword: true
       password: "mage"
   podDisruptionBudget:
-    create: true
+    create: false
     minAvailable: 2
   podAntiAffinityPreset: hard
   extraEnvVars:
@@ -105,7 +105,7 @@ mariadb:
         memory: 32Mi
         cpu: 250m
   persistence:
-    enabled: false
+    enabled: true
     size: 8Gi
   resources:
     requests:
