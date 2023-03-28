@@ -1,71 +1,43 @@
-{{- define "maxscale.isHa" -}}
-{{- and (eq (include "maxscale.component.isHa" .Values) "true") (eq (include "maxscale.component.isHa" .Values.mariadb) "true") -}}
+{{/* vim: set filetype=mustache: */}}
+{{/*
+Expand the name of the chart.
+*/}}
+{{- define "maxscale.name" -}}
+{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{- define "maxscale.component.isHa" -}}
-{{- $podDisruptionBudgetEnabled := false -}}
-{{- if typeIs "bool" .podDisruptionBudget -}}
-    {{- $podDisruptionBudgetEnabled = .podDisruptionBudget -}}
-{{ else if .podDisruptionBudget }}
-    {{- if hasKey .podDisruptionBudget "create" -}}
-        {{- $podDisruptionBudgetEnabled = .podDisruptionBudget.create -}}
-    {{- end -}}
-{{- end -}}
-{{- $hasEnoughReplicas := ge (.replicas | default .replicaCount | int) 2 -}}
-{{- if hasKey . "hpa" -}}
-    {{- if .hpa.enabled -}}
-        {{- $hasEnoughReplicas = ge (.hpa.minReplicas | int) 2 -}}
-    {{- end -}}
-{{- end -}}
-{{- and $podDisruptionBudgetEnabled $hasEnoughReplicas -}}
-{{- end -}}
-
-{{- define "maxscale.priorityClassName" -}}
-{{- if or .custom .global.priorityClassName -}}
-priorityClassName: {{ .custom | default .global.priorityClassName -}}
-{{- end -}}
-{{- end -}}
-
-{{- define "maxscale.maxscale.priorityClassName" -}}
-{{- include "maxscale.priorityClassName" (dict "custom" $.Values.priorityClassName "global" $.Values.global) -}}
-{{- end -}}
-
-{{- define "common.networkPolicy.type" -}}
-{{- if eq .Values.global.networkPolicy.type "auto" -}}
-{{- if .Capabilities.APIVersions.Has "cilium.io/v2/CiliumNetworkPolicy" -}}
-cilium
+{{/*
+Create a default fully qualified app name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+If release name contains chart name it will be used as a full name.
+*/}}
+{{- define "maxscale.fullname" -}}
+{{- if .Values.fullnameOverride -}}
+{{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
-none
-{{- end -}}
+{{- $name := default .Chart.Name .Values.nameOverride -}}
+{{- if contains $name .Release.Name -}}
+{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
-{{- .Values.global.networkPolicy.type -}}
+{{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
 {{- end -}}
 {{- end -}}
 
-{{- define "common.dict.filterEmptyValues" -}}
-{{- $out := dict -}}
-{{- range $key, $value := . -}}
-{{- if $value -}}
-{{- $out = set $out $key $value -}}
-{{- end -}}
-{{- end -}}
-{{ $out | toYaml }}
+{{/*
+Create chart name and version as used by the chart label.
+*/}}
+{{- define "maxscale.chart" -}}
+{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{- define "maxscale.cnf.cpu.limit" -}}
-{{- if hasSuffix "m" .Values.resources.limits.cpu }}
-    {{- ceil (divf (trimSuffix "m" .Values.resources.limits.cpu) (1000)) }}
+{{/*
+Get the password secret.
+*/}}
+{{- define "maxscale.secretName" -}}
+{{- if .Values.existingSecret -}}
+{{- printf "%s" .Values.existingSecret -}}
 {{- else -}}
-    1
-{{- end -}}
-{{- end -}}
-
-{{- define "maxscale.cnf.memory.limit" -}}
-{{- if hasSuffix "Mi" .Values.resources.limits.memory }}
-    {{- ceil (mulf (trimSuffix "Mi" .Values.resources.limits.memory) (0.15)) }}Mi
-{{- else if hasSuffix "Gi" .Values.resources.limits.memory -}}
-    {{- ceil (mulf (trimSuffix "Gi" .Values.resources.limits.memory) (0.15)) }}Gi
-{{- else -}}
-    {{- fail "Please insert the maxscale ressource limits in Gi or Mi" }}
+{{- printf "%s" (include "maxscale.fullname" .) -}}
 {{- end -}}
 {{- end -}}
