@@ -3,11 +3,11 @@
 # Declare variables to be passed into your templates.
 
 # -- IP or Hostname of the 1. Galera node
-db1Address: mariadb-galera-0
+db1Address: mariadb-galera-0.mariadb-galera-headless.curator.svc.cluster.local
 # -- IP or Hostname of the 2. Galera node
-db2Address: mariadb-galera-1
+db2Address: mariadb-galera-1.mariadb-galera-headless.curator.svc.cluster.local
 # -- IP or Hostname of the 3. Galera node
-db3Address: mariadb-galera-2
+db3Address: mariadb-galera-2.mariadb-galera-headless.curator.svc.cluster.local
 # -- MaxScale service user name
 serviceUser: maxscale
 # -- MaxScale service user password
@@ -32,7 +32,7 @@ nameOverride: ""
 fullnameOverride: ""
 
 service:
-  type: ClusterIP
+  type: LoadBalancer
   port: 3306
 
 resources: {}
