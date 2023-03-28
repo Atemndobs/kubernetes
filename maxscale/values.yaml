@@ -9,13 +9,13 @@ db2Address: mariadb-galera-1.mariadb-galera-headless.curator.svc.cluster.local
 # -- IP or Hostname of the 3. Galera node
 db3Address: mariadb-galera-2.mariadb-galera-headless.curator.svc.cluster.local
 # -- MaxScale service user name
-serviceUser: maxscale
+serviceUser: mage
 # -- MaxScale service user password
-servicePassword: secret
+servicePassword: mage
 # -- MaxScale monitor user name
-monitorUser: maxscale
+monitorUser: mage
 # -- MaxScale monitor user password
-monitorPassword: secret
+monitorPassword: mage
 
 ## MaxScale passwords using an existing secret
 ## The secret needs the keys 'service-password' and 'monitor-password'
