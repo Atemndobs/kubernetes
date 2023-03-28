@@ -3,11 +3,11 @@
 # Declare variables to be passed into your templates.
 
 # -- IP or Hostname of the 1. Galera node
-db1Address: mariadb-galera-0.mariadb-galera-headless.curator.svc.cluster.local
+db1Address: mariadb-galera-0
 # -- IP or Hostname of the 2. Galera node
-db2Address: mariadb-galera-1.mariadb-galera-headless.curator.svc.cluster.local
+db2Address: mariadb-galera-1
 # -- IP or Hostname of the 3. Galera node
-db3Address: mariadb-galera-2.mariadb-galera-headless.curator.svc.cluster.local
+db3Address: mariadb-galera-2
 # -- MaxScale service user name
 serviceUser: maxscale
 # -- MaxScale service user password
