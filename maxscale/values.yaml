@@ -25,16 +25,16 @@ hpa:
   minReplicas: 2
   maxReplicas: 4
 
-resources: {}
-#  requests:
-#    cpu: 125m
-#    memory: 128Mi
-#  limits:
-#    cpu: 500m
-#    memory: 512Mi
+resources:
+  requests:
+    cpu: 125m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
 
 livenessProbe:
-  enabled: true
+  enabled: false
   failureThreshold: 3
   periodSeconds: 10
   successThreshold: 1
@@ -42,7 +42,7 @@ livenessProbe:
   initialDelaySeconds: 2
 
 readinessProbe:
-  enabled: true
+  enabled: false
   failureThreshold: 3
   periodSeconds: 1
   successThreshold: 1
@@ -95,29 +95,29 @@ mariadb:
   metrics:
     enabled: false
     serviceMonitor:
-      enabled: true
+      enabled: false
       selector: false
-    resources: {}
-#      requests:
-#        memory: 32Mi
-#        cpu: 10m
-#      limits:
-#        memory: 32Mi
-#        cpu: 250m
+    resources:
+      requests:
+        memory: 32Mi
+        cpu: 10m
+      limits:
+        memory: 32Mi
+        cpu: 250m
   persistence:
-    enabled: true
+    enabled: false
     size: 8Gi
-  resources: {}
-#    requests:
-#      memory: 1Gi
-#      cpu: 100m
-#    limits:
-#      memory: 2Gi
-#      cpu: 1
+  resources:
+    requests:
+      memory: 1Gi
+      cpu: 100m
+    limits:
+      memory: 2Gi
+      cpu: 1
   podSecurityContext:
-    enabled: true
+    enabled: false
   containerSecurityContext:
-    enabled: true
+    enabled: false
     allowPrivilegeEscalation: false
     capabilities:
       drop:
