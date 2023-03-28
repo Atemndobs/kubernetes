@@ -237,7 +237,7 @@ containerSecurityContext:
 rootUser:
   ## @param rootUser.user Username for the admin user.
   ##
-  user: mage
+  user: root
   ## @param rootUser.password Password for the admin user. Ignored if existing secret is provided.
   ## Password is ignored if existingSecret is specified.
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb-galera#setting-the-root-password-on-first-run
@@ -246,7 +246,7 @@ rootUser:
   ## @param rootUser.forcePassword Option to force users to specify a password. That is required for 'helm upgrade' to work properly.
   ## If it is not force, a random password will be generated.
   ##
-  forcePassword: true
+  forcePassword: false
 ## @param existingSecret Use existing secret for password details (`rootUser.password`, `db.password`, `galera.mariabackup.password` will be ignored and picked up from this secret)
 ## The secret has to contain the keys mariadb-root-password, mariadb-galera-mariabackup-password and mariadb-password.
 ##
@@ -279,7 +279,7 @@ db:
   ## @param db.forcePassword Option to force users to specify a password. That is required for 'helm upgrade' to work properly.
   ## If it is not force, a random password will be generated.
   ##
-  forcePassword: true
+  forcePassword: false
 ## Galera configuration
 ##
 galera:
@@ -395,7 +395,7 @@ mariadbConfiguration: |-
   ##
   skip_host_cache
   skip_name_resolve
-  max_allowed_packet=126M
+  max_allowed_packet=16M
   max_connect_errors=1000000
   sql_mode=STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_AUTO_VALUE_ON_ZERO,NO_ENGINE_SUBSTITUTION,NO_ZERO_DATE,NO_ZERO_IN_DATE,ONLY_FULL_GROUP_BY
   sysdate_is_now=1
