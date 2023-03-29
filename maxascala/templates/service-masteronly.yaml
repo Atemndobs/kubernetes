@@ -8,11 +8,14 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   ports:
     - name: master-only
       port: 3306
       targetPort: 3306
+    - name: maxadmin
+      port: 8989
+      targetPort: 8989
   selector:
     app.kubernetes.io/name: {{ include "maxscale.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
