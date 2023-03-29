@@ -33,7 +33,9 @@ fullnameOverride: ""
 
 service:
   type: LoadBalancer
-  port: 3306
+  port:
+    - 3306 : 3306
+    - 8989 : 8989
 
 resources: {}
 # We usually recommend not to specify default resources and to leave
