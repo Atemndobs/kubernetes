@@ -36,7 +36,7 @@ nameOverride: ""
 fullnameOverride: ""
 
 service:
-  type: clusterIP
+  type: ClusterIP
   port:
     - 3306 : 3306
     - 8989 : 8989
