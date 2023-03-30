@@ -8,6 +8,19 @@ db1Address: mariadb-galera-0
 db2Address: mariadb-galera-1
 # -- IP or Hostname of the 3. Galera node
 db3Address: mariadb-galera-2
+
+mariadb:
+  replicaCount: 3
+  rootUser:
+    forcePassword: true
+    password: "mage"
+  db:
+    forcePassword: true
+    password: "mage"
+  galera:
+    mariabackup:
+      forcePassword: true
+      password: "mage"
 # -- MaxScale service user name
 serviceUser: mage
 # -- MaxScale service user password
