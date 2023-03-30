@@ -1,128 +1,97 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "common.names.fullname" . }}
-  namespace: {{ .Release.Namespace }}
-  labels: {{- include "common.labels.standard" $ | nindent 4 }}
+  name: {{ include "maxscale.fullname" . }}
+  labels:
+    app: {{ include "maxscale.name" . }}
+    app.kubernetes.io/name: {{ include "maxscale.name" . }}
+    helm.sh/chart: {{ include "maxscale.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
-  strategy:
-    type: RollingUpdate
-  {{- if not .Values.hpa.enabled }}
-  replicas: {{ .Values.replicas }}
-  {{- else }}
-  replicas: {{ .Values.hpa.minReplicas }}
-  {{- end }}
+  replicas: {{ .Values.replicaCount }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" $ | nindent 6 }}
+    matchLabels:
+      app.kubernetes.io/name: {{ include "maxscale.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
-      labels: {{- include "common.labels.stable" $ | nindent 8 }}
+      labels:
+        app.kubernetes.io/name: {{ include "maxscale.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
       annotations:
-        checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
-        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+        prometheus.io/port: "9195"
+        prometheus.io/scheme: http
+        prometheus.io/scrape: "true"
     spec:
-      affinity:
-        podAffinity: {{- include "common.affinities.pods.soft" (dict "component" "" "extraMatchLabels" (dict) "context" (dict "Release" .Release "Chart" (dict "Name" "mariadb") "Values" .Values.mariadb)) | nindent 10 }}
-      topologySpreadConstraints:
-        - maxSkew: 1
-          topologyKey: topology.kubernetes.io/zone
-          whenUnsatisfiable: DoNotSchedule
-          labelSelector:
-            matchLabels: {{- include "common.labels.matchLabels" $ | nindent 14 }}
-        - maxSkew: 1
-          topologyKey: kubernetes.io/hostname
-          whenUnsatisfiable: ScheduleAnyway
-          labelSelector:
-            matchLabels: {{- include "common.labels.matchLabels" $ | nindent 14 }}
-      {{- include "maxscale.maxscale.priorityClassName" $ | nindent 6 }}
-      {{- include "maxscale.imagePullSecrets" . | nindent 6 }}
-      {{- .Values.securityOptions | toYaml | nindent 6 }}
-      automountServiceAccountToken: false
-      securityContext: {{- .Values.securityContext | toYaml | nindent 8 }}
-      enableServiceLinks: false
       containers:
+      {{- if .Values.metrics.enabled }}
+        - name: exporter
+          image: "{{ .Values.metrics.image.repository }}:{{ .Values.metrics.image.tag }}"
+          imagePullPolicy: {{ .Values.metrics.image.pullPolicy }}
+          ports:
+            - containerPort: 9195
+              name: prometheus
+              protocol: TCP
+          resources:
+{{ toYaml .Values.metrics.resources | indent 12 }}
+      {{- end }}
         - name: maxscale
-          securityContext: {{- .Values.containerSecurityContext | toYaml | nindent 12 }}
-          image: {{ template "maxscale.image" . }}
-          {{- if .Values.image.repository | contains "@" }}
-          imagePullPolicy: IfNotPresent
-          {{- else }}
-          imagePullPolicy: Always
-          {{- end }}
-          command:
-            - maxscale
-            - --syslog=no
-            - --log=stdout
-            - --nodaemon
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
-            - name: MAXSCALE_PASSWORD
+            - name: MASTER_ONLY_LISTEN_ADDRESS
+              value: 0.0.0.0
+            - name: READ_WRITE_LISTEN_ADDRESS
+              value: 0.0.0.0
+            - name: DB1_ADDRESS
+              value: {{ .Values.db1Address }}
+            - name: DB2_ADDRESS
+              value: {{ .Values.db2Address }}
+            - name: DB3_ADDRESS
+              value: {{ .Values.db3Address }}
+            - name: SERVICE_USER
+              value: {{ .Values.serviceUser }}
+            - name: MONITOR_USER
+              value: {{ .Values.monitorUser }}
+            - name: SERVICE_PWD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "common.secrets.name" (dict "existingSecret" (dict) "defaultNameSuffix" "" "context" $) }}
-                  key: {{ include "common.secrets.key" (dict "existingSecret" (dict) "key" "root-password") }}
+                  name: {{ template "maxscale.secretName" . }}
+                  key: service-password
+            - name: MONITOR_PWD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "maxscale.secretName" . }}
+                  key: monitor-password
           ports:
-            - name: mysql
+            - name: master-only
               containerPort: 3306
-              protocol: TCP
-          {{- if .Values.readinessProbe.enabled }}
+            - name: rw-split
+              containerPort: 3307
+            - name: admin
+              containerPort: 8989
+          livenessProbe:
+            tcpSocket:
+              port: master-only
+            initialDelaySeconds: 3
+            periodSeconds: 3
           readinessProbe:
             tcpSocket:
-              port: mysql
-            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
-            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
-            successThreshold: {{ .Values.readinessProbe.successThreshold }}
-            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
-          {{- end }}
-          {{- if .Values.livenessProbe.enabled }}
-          livenessProbe:
-            exec:
-              command:
-                - bash
-                - -ex
-                - -c
-                - |-
-                  maxctrl show maxscale
-                  {{ $fullName := include "common.names.dependency.fullname" (dict "chartName" "mariadb" "chartValues" $.Values.mariadb "context" $) -}}
-                  {{ range $INDEX := until (.Values.mariadb.replicaCount | int) -}}
-                  timeout 2 nslookup {{ printf "%s-%d.%s-headless.%s.svc.%s" $fullName $INDEX $fullName ($.Release.Namespace) $.Values.mariadb.clusterDomain }}
-                  {{ end }}
-            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
-            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
-            successThreshold: {{ .Values.livenessProbe.successThreshold }}
-            timeoutSeconds: {{ add (mul 2 (.Values.mariadb.replicaCount | int)) 5 }}
-          {{- end }}
-          volumeMounts:
-            - name: configuration
-              mountPath: /etc/maxscale.cnf.d/mariadb-galera.cnf
-              readOnly: true
-              subPath: mariadb-galera.cnf
-            - name: configuration
-              mountPath: /etc/maxscale.cnf
-              readOnly: true
-              subPath: maxscale.cnf
-            - name: cache
-              mountPath: /var/cache/maxscale
-          resources: {{- toYaml .Values.resources | nindent 12 }}
-      initContainers: {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
-      volumes:
-        - name: configuration
-          configMap:
-            optional: false
-            name: "{{ include "common.names.fullname" . }}-configuration"
-        - name: cache
-          emptyDir:
-            medium: Memory
-      {{- with .Values.nodeSelector }}
-      nodeSelector: {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.hostAliases }}
-      hostAliases: {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.affinity }}
-      affinity: {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.tolerations }}
-      tolerations: {{- toYaml . | nindent 8 }}
-  {{- end }}
+              port: master-only
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
