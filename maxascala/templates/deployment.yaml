@@ -69,6 +69,8 @@ spec:
               containerPort: 3306
             - name: rw-split
               containerPort: 3307
+            - name: admin
+              containerPort: 8989
           livenessProbe:
             tcpSocket:
               port: master-only

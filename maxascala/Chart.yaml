@@ -1,9 +1,9 @@
 apiVersion: v1
-appVersion: 22.08.4
+appVersion: 22.08 # mariadb/maxscale:22.08
 description: MaxScale Helm Chart
 home: https://mariadb.com/products/technology/maxscale
 maintainers:
 - email: info@appuio.ch
   name: APPUiO Team
 name: maxscale
-version: 1.1.2
+version: 1.1.
