@@ -15560,6 +15560,9 @@ subjects:
   namespace: argocd
 ---
 apiVersion: v1
+data:
+  admin.enabled: "true"
+
 kind: ConfigMap
 metadata:
   labels:
