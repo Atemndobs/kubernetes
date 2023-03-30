@@ -26,7 +26,7 @@ replicaCount: 1
 image:
   registry: docker.io
   repository: mariadb/maxscale
-  tag: 22.08
+  tag: 22.08.4
   pullPolicy: IfNotPresent
 #  repository: docker.io/appuio/maxscale
 #  tag: 2.2.20
