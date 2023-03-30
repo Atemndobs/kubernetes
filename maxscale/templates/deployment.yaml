@@ -72,11 +72,13 @@ spec:
             - name: admin
               containerPort: 8989
           livenessProbe:
+            enabled: false
             tcpSocket:
               port: master-only
             initialDelaySeconds: 3
             periodSeconds: 3
           readinessProbe:
+            enabled: false
             tcpSocket:
               port: master-only
             initialDelaySeconds: 3
