@@ -38,7 +38,7 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: nest-app
+#      app: nest-app
   template:
     metadata:
       labels:
