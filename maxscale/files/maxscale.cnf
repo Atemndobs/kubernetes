@@ -126,3 +126,27 @@ servers=Shard-A,Shard-B
 user=mage
 password=mage
 
+=================================
+
+    [MariaDB-Monitor]
+    type=monitor
+    module=galeramon
+    servers=server-0,server-1,server-2
+    user=mage
+    password=$MAXSCALE_PASSWORD
+    backend_connect_timeout=3s
+    backend_write_timeout=3s
+    backend_read_timeout=3s
+    disable_master_failback=false
+    disable_master_role_setting=false
+
+    [Read-Write-Service]
+    type=service
+    router=readwritesplit
+    master_failure_mode=fail_on_write
+    servers=server-0,server-1,server-2
+    user=mage
+    password=$MAXSCALE_PASSWORD
+    enable_mage_user=true
+
+    maxctrl show servers

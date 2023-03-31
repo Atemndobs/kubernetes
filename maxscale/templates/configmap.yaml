@@ -26,48 +26,39 @@ data:
 
     [server-0]
     type=server
-    address=mariadb-galera-0.curator.svc.cluster.local
+    address=mariadb-galera-headless.curator.svc.cluster.local
     port=3306
     protocol=MariaDBBackend
 
     [server-1]
     type=server
-    address=mariadb-galera-1.curator.svc.cluster.local
+    address=mariadb-galera-headless.curator.svc.cluster.local
     port=3306
     protocol=MariaDBBackend
 
     [server-2]
     type=server
-    address=mariadb-galera-2.curator.svc.cluster.local
+    address=mariadb-galera-headless.curator.svc.cluster.local
     port=3306
     protocol=MariaDBBackend
-
-    [MariaDB-Monitor]
-    type=monitor
-    module=galeramon
-    servers=server-0,server-1,server-2
-    user=root
-    password=$MAXSCALE_PASSWORD
-    backend_connect_timeout=3s
-    backend_write_timeout=3s
-    backend_read_timeout=3s
-    disable_master_failback=false
-    disable_master_role_setting=false
-
-    [Read-Write-Service]
-    type=service
-    router=readwritesplit
-    master_failure_mode=fail_on_write
-    servers=server-0,server-1,server-2
-    user=root
-    password=$MAXSCALE_PASSWORD
-    enable_root_user=true
 
     [Read-Write-Listener]
     type=listener
     service=Read-Write-Service
     protocol=MariaDBClient
     port=3306
+
+    [Shard-B-Monitor]
+    type=monitor
+    module=mariadbmon
+    servers=server-0,server-1,server-2
+    user=mage
+    password=mage
+
+
+
+
+
 
 
 
@@ -94,7 +85,7 @@ data:
     type=monitor
     module=galeramon
     servers=server-0,server-1,server-2
-    user=root
+    user=mage
     password=$MAXSCALE_PASSWORD
     backend_connect_timeout=3s
     backend_write_timeout=3s
@@ -107,9 +98,9 @@ data:
     router=readwritesplit
     master_failure_mode=fail_on_write
     servers=server-0,server-1,server-2
-    user=root
+    user=mage
     password=$MAXSCALE_PASSWORD
-    enable_root_user=true
+    enable_mage_user=true
 
     [Read-Write-Listener]
     type=listener
