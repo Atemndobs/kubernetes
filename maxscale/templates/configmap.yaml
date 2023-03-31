@@ -19,118 +19,56 @@ data:
     admin_auth=1
     admin_enabled=1
     admin_secure_gui=false
-    # Shard A
-    [mariadb-master-1]
-    type=server
-    address=mariadb_master_1
-    port=3306
-    protocol=MysqlBackend
 
-    [mariadb-slave-1]
-    type=server
-    address=mariadb_slave_1
-    port=3306
-    protocol=MysqlBackend
+    [Galera]
+    type=service
+    router=readconnroute
 
-    [mariadb-slave-2]
+    [server-0]
     type=server
-    address=mariadb_slave_2
+    address=mariadb-galera-0.curator.svc.cluster.local
     port=3306
-    protocol=MysqlBackend
+    protocol=MariaDBBackend
 
-    [Shard-A-Router]
+    [server-1]
+    type=server
+    address=mariadb-galera-1.curator.svc.cluster.local
+    port=3306
+    protocol=MariaDBBackend
+
+    [server-2]
+    type=server
+    address=mariadb-galera-2.curator.svc.cluster.local
+    port=3306
+    protocol=MariaDBBackend
+
+    [MariaDB-Monitor]
+    type=monitor
+    module=galeramon
+    servers=server-0,server-1,server-2
+    user=root
+    password=$MAXSCALE_PASSWORD
+    backend_connect_timeout=3s
+    backend_write_timeout=3s
+    backend_read_timeout=3s
+    disable_master_failback=false
+    disable_master_role_setting=false
+
+    [Read-Write-Service]
     type=service
     router=readwritesplit
-    servers=mariadb-master-1,mariadb-slave-1,mariadb-slave-2
-    user=mage
-    password=mage
+    master_failure_mode=fail_on_write
+    servers=server-0,server-1,server-2
+    user=root
+    password=$MAXSCALE_PASSWORD
+    enable_root_user=true
 
-    [Shard-A-Listener]
+    [Read-Write-Listener]
     type=listener
-    service=Shard-A-Router
-    protocol=MysqlClient
-    port=4006
-
-    [Shard-A-Monitor]
-    type=monitor
-    module=mariadbmon
-    servers=mariadb-master-1,mariadb-slave-1,mariadb-slave-2
-    user=mage
-    password=mage
-
-    # Shard B
-    [mariadb-master-2]
-    type=server
-    address=mariadb_master_2
+    service=Read-Write-Service
+    protocol=MariaDBClient
     port=3306
-    protocol=MysqlBackend
 
-    [mariadb-slave-3]
-    type=server
-    address=mariadb_slave_3
-    port=3306
-    protocol=MysqlBackend
-
-    [mariadb-slave-4]
-    type=server
-    address=mariadb_slave_4
-    port=3306
-    protocol=MysqlBackend
-
-    [Shard-B-Monitor]
-    type=monitor
-    module=mariadbmon
-    servers=mariadb-master-2,mariadb-slave-3,mariadb-slave-4
-    user=mage
-    password=mage
-
-    [Shard-B-Router]
-    type=service
-    router=readwritesplit
-    servers=mariadb-master-2,mariadb-slave-3,mariadb-slave-4
-    user=mage
-    password=mage
-
-    [Shard-B-Listener]
-    type=listener
-    service=Shard-B-Router
-    protocol=MysqlClient
-    port=4007
-
-    # The two services abstracted as servers
-    [Shard-A]
-    type=server
-    address=127.0.0.1
-    port=4006
-    protocol=MySQLBackend
-
-    [Shard-B]
-    type=server
-    address=127.0.0.1
-    port=4007
-    protocol=MySQLBackend
-
-    # The sharding service
-    [Sharding-Service]
-    type=service
-    router=schemarouter
-    servers=Shard-A,Shard-B
-    user=mage
-    password=mage
-    ignore_tables_regex=.*.
-
-    [Sharding-Listener]
-    type=listener
-    service=Sharding-Service
-    protocol=MysqlClient
-    port=4000
-
-    [Shard-Monitor]
-    type=monitor
-    module=mariadbmon
-    servers=Shard-A,Shard-B
-    user=mage
-    password=mage
 
 
   mariadb-galera.cnf: |-
