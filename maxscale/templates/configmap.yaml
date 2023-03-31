@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "maxscale.fullname" . }}-config
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ include "maxscale.name" . }}
+    helm.sh/chart: {{ include "maxscale.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+data:
+  maxscale.cnf: |-
+    [maxscale]
+    threads= 1
+    query_classifier_cache_size= 10000
+    piddir=/var/cache/maxscale
+    persistdir=/var/cache/maxscale
+    datadir=/var/cache/maxscale
+    admin_gui=true
+
+  mariadb-galera.cnf: |-
+    [server-0]
+    type=server
+    address=mariadb-galera-0.curator.svc.cluster.local
+    port=3306
+    protocol=MariaDBBackend
+
+    [server-1]
+    type=server
+    address=mariadb-galera-1.curator.svc.cluster.local
+    port=3306
+    protocol=MariaDBBackend
+
+    [server-2]
+    type=server
+    address=mariadb-galera-2.curator.svc.cluster.local
+    port=3306
+    protocol=MariaDBBackend
+
+    [MariaDB-Monitor]
+    type=monitor
+    module=galeramon
+    servers=server-0,server-1,server-2
+    user=root
+    password=$MAXSCALE_PASSWORD
+    backend_connect_timeout=3s
+    backend_write_timeout=3s
+    backend_read_timeout=3s
+    disable_master_failback=false
+    disable_master_role_setting=false
+
+    [Read-Write-Service]
+    type=service
+    router=readwritesplit
+    master_failure_mode=fail_on_write
+    servers=server-0,server-1,server-2
+    user=root
+    password=$MAXSCALE_PASSWORD
+    enable_root_user=true
+
+    [Read-Write-Listener]
+    type=listener
+    service=Read-Write-Service
+    protocol=MariaDBClient
+    port=3306
