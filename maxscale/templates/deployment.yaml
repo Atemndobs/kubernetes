@@ -64,9 +64,6 @@ spec:
                 secretKeyRef:
                   name: {{ template "maxscale.secretName" . }}
                   key: monitor-password
-        volumeMounts:
-          - name: maxscale-config
-            mountPath: /etc/maxscale.cnf
           ports:
             - name: master-only
               containerPort: 3306
@@ -90,6 +87,11 @@ spec:
             periodSeconds: 3
             {{- end }}
           resources:
+      volumes:
+        - name: config
+          configMap:
+            optional: false
+            name: {{ include "maxscale.fullname" . }}-config
 {{ toYaml .Values.resources | indent 12 }}
     {{- with .Values.nodeSelector }}
       nodeSelector:
