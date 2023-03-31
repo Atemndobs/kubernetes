@@ -41,6 +41,10 @@ spec:
     spec:
       containers:
         - name: vue-app
+          labels:
+              app: vue-app
+              app.kubernetes.io/name: vue-app
+              app.kubernetes.io/instance: vue-app
           image: atemndobs/music-player:v1.3
           command: ["sh", "-c", "npm run serve"]
           ports:
