@@ -3,11 +3,11 @@
 # Declare variables to be passed into your templates.
 
 # -- IP or Hostname of the 1. Galera node
-db1Address: mariadb-galera-0
+db1Address: mariadb-galera-0.curator.svc.cluster.local
 # -- IP or Hostname of the 2. Galera node
-db2Address: mariadb-galera-1
+db2Address: mariadb-galera-1.curator.svc.cluster.local
 # -- IP or Hostname of the 3. Galera node
-db3Address: mariadb-galera-2
+db3Address: mariadb-galera-2.curator.svc.cluster.local
 
 mariadb:
   replicaCount: 3
@@ -29,6 +29,24 @@ servicePassword: mage
 monitorUser: mage
 # -- MaxScale monitor user password
 monitorPassword: mage
+rootPassword: mage
+
+mariadb:
+  replicaCount: 3
+  rootUser:
+    forcePassword: true
+    password: "mage"
+  db:
+    forcePassword: true
+    password: "mage"
+  galera:
+    mariabackup:
+      forcePassword: true
+      password: "mage"
+  podDisruptionBudget:
+    create: false
+    minAvailable: 2
+  podAntiAffinityPreset: hard
 
 ## MaxScale passwords using an existing secret
 ## The secret needs the keys 'service-password' and 'monitor-password'
