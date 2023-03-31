@@ -25,7 +25,7 @@ spec:
         prometheus.io/scrape: "true"
     spec:
       volumes:
-        - name: config
+        - name: maxscale-config
           configMap:
             name: {{ template "maxscale.fullname" . }}-config
       containers:
@@ -38,6 +38,9 @@ spec:
               name: prometheus
               protocol: TCP
           resources:
+          volumeMounts:
+            - mountPath: /etc/maxscale.cnf
+              name: maxscale-config
 {{ toYaml .Values.metrics.resources | indent 12 }}
       {{- end }}
         - name: maxscale
