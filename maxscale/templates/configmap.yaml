@@ -9,14 +9,16 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 data:
   maxscale.cnf: |-
-    [admin_interface]
-    type=restapi
-    module=maxscaled
-    address=127.0.0.1
-    port=8989
-    auth_type=plain
-    auth_source=maxscale
-
+    [maxscale]
+    threads=auto
+    skip_permission_checks=true
+    admin_host=0.0.0.0
+    # this enables external access to the REST API outside of localhost
+    # please review / modify for any public / non development environments
+    admin_port=8989
+    admin_auth=1
+    admin_enabled=1
+    admin_secure_gui=false
     substitute_variables=true
     piddir=/var/cache/maxscale
     persistdir=/var/cache/maxscale
@@ -27,15 +29,16 @@ data:
     maxlog=true
     syslog=true
 
-    [authenticator]
-    type=authenticator
-    module=mysql
-    authenticator_port=3306
-    authenticator_host=127.0.0.1
-    authenticator_username=maxscale
-    authenticator_password=maxscale
+    [admin_interface]
+    type=restapi
+    module=maxscaled
+    address=127.0.0.1
+    port=8989
+    auth_type=plain
+    auth_source=maxscale
 
-    [server-0]
+
+  [server-0]
     type=server
     address={{.Values.db1Address}}
     port=3306
