@@ -76,7 +76,7 @@ spec:
             - name: admin
               containerPort: 8989
           volumeMounts:
-            - mountPath: /etc/
+            - mountPath: /etc/maxscale.cnf/
               subPath: maxscale.cnf
               name: configuration
           livenessProbe:
