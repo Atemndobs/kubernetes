@@ -29,24 +29,10 @@ servicePassword: mage
 monitorUser: mage
 # -- MaxScale monitor user password
 monitorPassword: mage
+# -- MaxScale root user name
+rootUser: mage
+# -- MaxScale root user password
 rootPassword: mage
-
-mariadb:
-  replicaCount: 3
-  rootUser:
-    forcePassword: true
-    password: "mage"
-  db:
-    forcePassword: true
-    password: "mage"
-  galera:
-    mariabackup:
-      forcePassword: true
-      password: "mage"
-  podDisruptionBudget:
-    create: false
-    minAvailable: 2
-  podAntiAffinityPreset: hard
 
 ## MaxScale passwords using an existing secret
 ## The secret needs the keys 'service-password' and 'monitor-password'
