@@ -24,6 +24,10 @@ spec:
         prometheus.io/scheme: http
         prometheus.io/scrape: "true"
     spec:
+      volumes:
+        - name: config
+          configMap:
+            name: {{ template "maxscale.fullname" . }}
       containers:
       {{- if .Values.metrics.enabled }}
         - name: exporter
@@ -64,9 +68,6 @@ spec:
                 secretKeyRef:
                   name: {{ template "maxscale.secretName" . }}
                   key: monitor-password
-          volumeMounts:
-            - name: maxscale-config
-              mountPath: /etc/maxscale.cnf.d/
           ports:
             - name: master-only
               containerPort: 3306
@@ -74,6 +75,9 @@ spec:
               containerPort: 3307
             - name: admin
               containerPort: 8989
+          volumeMounts:
+            - mountPath: /etc/maxscale.cnf
+              name: config
           livenessProbe:
             {{- if .Values.livenessProbe.enabled }}
             tcpSocket:
@@ -90,11 +94,6 @@ spec:
             periodSeconds: 3
             {{- end }}
           resources:
-      volumes:
-        - name: maxscale-config
-          configMap:
-            optional: false
-            name: {{ include "maxscale.fullname" . }}-config
 {{ toYaml .Values.resources | indent 12 }}
     {{- with .Values.nodeSelector }}
       nodeSelector:
