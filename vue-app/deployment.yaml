@@ -23,6 +23,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: vue-app
+  labels:
+    app.kubernetes.io/name: vue-app
+    app.kubernetes.io/instance: vue-app
   namespace: curator
 spec:
   replicas: 1
