@@ -16,7 +16,7 @@ data:
     persistdir=/var/cache/maxscale
     datadir=/var/cache/maxscale
     admin_gui=true
-    
+    admin_enabled=true
 
   mariadb-galera.cnf: |-
     [server-0]
