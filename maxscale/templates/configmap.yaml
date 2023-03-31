@@ -36,49 +36,48 @@ data:
     port=8989
     auth_type=plain
     auth_source=maxscale
+    
+    [server-0]
+      type=server
+      address={{.Values.db1Address}}
+      port=3306
+      protocol=MariaDBBackend
 
+      [server-1]
+      type=server
+      address={{.Values.db2Address}}
+      port=3306
+      protocol=MariaDBBackend
 
-  [server-0]
-    type=server
-    address={{.Values.db1Address}}
-    port=3306
-    protocol=MariaDBBackend
+      [server-2]
+      type=server
+      address={{.Values.db3Address}}
+      port=3306
+      protocol=MariaDBBackend
 
-    [server-1]
-    type=server
-    address={{.Values.db2Address}}
-    port=3306
-    protocol=MariaDBBackend
+      [MariaDB-Monitor]
+      type=monitor
+      module=galeramon
+      servers=server-0,server-1,server-2
+      backend_connect_timeout=3s
+      backend_write_timeout=3s
+      backend_read_timeout=3s
+      disable_master_failback=false
+      disable_master_role_setting=false
+      user={{.Values.monitorUser}}
+      password={{.Values.monitorPassword}}
 
-    [server-2]
-    type=server
-    address={{.Values.db3Address}}
-    port=3306
-    protocol=MariaDBBackend
+      [Read-Write-Service]
+      type=service
+      router=readwritesplit
+      master_failure_mode=fail_on_write
+      servers=server-0,server-1,server-2
+      user={{.Values.serviceUser}}
+      password={{.Values.servicePassword}}
+      enable_root_user=true
 
-    [MariaDB-Monitor]
-    type=monitor
-    module=galeramon
-    servers=server-0,server-1,server-2
-    backend_connect_timeout=3s
-    backend_write_timeout=3s
-    backend_read_timeout=3s
-    disable_master_failback=false
-    disable_master_role_setting=false
-    user={{.Values.monitorUser}}
-    password={{.Values.monitorPassword}}
-
-    [Read-Write-Service]
-    type=service
-    router=readwritesplit
-    master_failure_mode=fail_on_write
-    servers=server-0,server-1,server-2
-    user={{.Values.serviceUser}}
-    password={{.Values.servicePassword}}
-    enable_root_user=true
-
-    [Read-Write-Listener]
-    type=listener
-    service=Read-Write-Service
-    protocol=MariaDBClient
-    port=3306
+      [Read-Write-Listener]
+      type=listener
+      service=Read-Write-Service
+      protocol=MariaDBClient
+      port=3306
