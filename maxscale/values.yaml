@@ -34,6 +34,8 @@ rootUser: mage
 # -- MaxScale root user password
 rootPassword: mage
 
+maxscaleUser: admin
+maxscalePassword: mariadb
 ## MaxScale passwords using an existing secret
 ## The secret needs the keys 'service-password' and 'monitor-password'
 # existingSecret: secret
@@ -43,7 +45,7 @@ replicaCount: 1
 image:
   registry: docker.io
   repository: mariadb/maxscale
-  tag: 22.08.4
+  tag: 22.08.5
   pullPolicy: IfNotPresent
 #  repository: docker.io/appuio/maxscale
 #  tag: 2.2.20
@@ -53,9 +55,10 @@ nameOverride: ""
 fullnameOverride: ""
 
 service:
-  type: ClusterIP
+  type: LoadBalancer
   port:
     - 3306 : 3306
+    - 8989 : 8989
 
 livenessProbe:
   enabled: false

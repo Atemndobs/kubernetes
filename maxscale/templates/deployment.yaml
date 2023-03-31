@@ -68,12 +68,12 @@ spec:
                 secretKeyRef:
                   name: {{ template "maxscale.secretName" . }}
                   key: monitor-password
+            - name: MAXSCALE_USER
+              value: {{ .Values.maxscaleUser }}}
+            - name: MAXSCALE_PASSWORD
+              value: {{ .Values.maxscalePassword }}
           ports:
-            - name: master-only
-              containerPort: 3306
-            - name: rw-split
-              containerPort: 3307
-            - name: admin
+            - name: admin-ui
               containerPort: 8989
           volumeMounts:
             - mountPath: /etc/maxscale.cnf/
