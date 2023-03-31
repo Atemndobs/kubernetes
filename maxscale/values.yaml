@@ -29,7 +29,7 @@ servicePassword: mage
 monitorUser: mage
 # -- MaxScale monitor user password
 monitorPassword: mage
-root-password: mage
+rootPassword: mage
 
 mariadb:
   replicaCount: 3
