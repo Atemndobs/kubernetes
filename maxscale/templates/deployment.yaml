@@ -38,9 +38,6 @@ spec:
               name: prometheus
               protocol: TCP
           resources:
-          volumeMounts:
-            - mountPath: /etc/maxscale.cnf
-              name: configuration
 {{ toYaml .Values.metrics.resources | indent 12 }}
       {{- end }}
         - name: maxscale
@@ -79,8 +76,9 @@ spec:
             - name: admin
               containerPort: 8989
           volumeMounts:
-            - mountPath: /etc/maxscale.cnf
-              name: config
+            - mountPath: /etc/
+              subPath: maxscale.cnf
+              name: configuration
           livenessProbe:
             {{- if .Values.livenessProbe.enabled }}
             tcpSocket:
