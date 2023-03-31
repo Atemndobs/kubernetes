@@ -66,7 +66,7 @@ spec:
                   key: monitor-password
         volumeMounts:
           - name: maxscale-config
-            mountPath: /etc/maxscale.cnf.d/
+            mountPath: /etc/maxscale.cnf
           ports:
             - name: master-only
               containerPort: 3306
