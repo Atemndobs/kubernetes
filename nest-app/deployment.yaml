@@ -9,6 +9,8 @@ metadata:
 spec:
   selector:
     app: nest-app
+    app.kubernetes.io/name: nest-app
+    app.kubernetes.io/instance: nest-app
   ports:
   - name: http
     protocol: TCP
@@ -28,6 +30,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nest-app
+  labels:
+      app.kubernetes.io/name: nest-app
+      app.kubernetes.io/instance: nest-app
   namespace: curator
 spec:
   replicas: 1
@@ -38,6 +43,8 @@ spec:
     metadata:
       labels:
         app: nest-app
+        app.kubernetes.io/name: nest-app
+        app.kubernetes.io/instance: nest-app
     spec:
       containers:
       - name: nest-app
