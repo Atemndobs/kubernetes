@@ -15,10 +15,11 @@ data:
     admin_host=0.0.0.0
     # this enables external access to the REST API outside of localhost
     # please review / modify for any public / non development environments
-    admin_port=8989
+    # admin_port=8989
     admin_auth=1
     admin_enabled=1
     admin_secure_gui=false
+
     substitute_variables=true
     piddir=/var/cache/maxscale
     persistdir=/var/cache/maxscale
