@@ -71,17 +71,21 @@ spec:
               containerPort: 3307
             - name: admin
               containerPort: 8989
-          livenessProbe: {{- if .Values.livenessProbe.enabled }}
+          livenessProbe:
+            {{- if .Values.livenessProbe.enabled }}
             tcpSocket:
               port: master-only
             initialDelaySeconds: 3
             periodSeconds: 3
-          readinessProbe: {{- if .Values.readinessProbe.enabled }}
+            {{- end }}
+          readinessProbe:
+            {{- if .Values.readinessProbe.enabled }}
             enabled: false
             tcpSocket:
               port: master-only
             initialDelaySeconds: 3
             periodSeconds: 3
+            {{- end }}
           resources:
 {{ toYaml .Values.resources | indent 12 }}
     {{- with .Values.nodeSelector }}
