@@ -36,6 +36,8 @@ spec:
     metadata:
       labels:
         app: vue-app
+        app.kubernetes.io/name: vue-app
+        app.kubernetes.io/instance: vue-app
     spec:
       containers:
         - name: vue-app
