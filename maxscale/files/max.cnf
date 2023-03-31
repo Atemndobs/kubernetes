@@ -121,4 +121,4 @@
     module=mariadbmon
     servers=Shard-A,Shard-B
     user=mage
-password=mage
+    password=mage

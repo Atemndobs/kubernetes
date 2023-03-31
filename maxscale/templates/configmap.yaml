@@ -29,14 +29,7 @@ data:
     maxlog=true
     syslog=true
 
-    [admin_interface]
-    type=restapi
-    module=maxscaled
-    address=127.0.0.1
-    port=8989
-    auth_type=plain
-    auth_source=maxscale
-    
+
     [server-0]
       type=server
       address={{.Values.db1Address}}

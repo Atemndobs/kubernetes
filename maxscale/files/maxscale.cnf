@@ -149,6 +149,6 @@ password=mage
     password=$MAXSCALE_PASSWORD
     enable_mage_user=true
 
-    maxctrl list servers && maxctrl list services && maxctrl list monitors
+    maxctrl list servers && maxctrl list services && maxctrl list monitors && maxctrl list listeners
 
 
