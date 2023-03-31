@@ -23,6 +23,11 @@ data:
     piddir=/var/cache/maxscale
     persistdir=/var/cache/maxscale
     datadir=/var/cache/maxscale
+    # logdir=/var/log/maxscale
+    log_info=true
+    log_warn_super_user=true
+    maxlog=true
+    syslog=true
 
     [server-0]
     type=server
