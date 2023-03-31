@@ -27,7 +27,7 @@ spec:
       volumes:
         - name: config
           configMap:
-            name: {{ template "maxscale.fullname" . }}
+            name: {{ template "maxscale.fullname" . }}-config
       containers:
       {{- if .Values.metrics.enabled }}
         - name: exporter
