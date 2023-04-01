@@ -12,7 +12,7 @@ spec:
   type: LoadBalancer
   ports:
     - name: http
-      port: 8899
+      port: 8900
       targetPort: http
 {{/*  type: ClusterIP*/}}
 {{/*  ports:*/}}
