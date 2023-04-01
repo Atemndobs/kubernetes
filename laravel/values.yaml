@@ -257,7 +257,7 @@ ingress:
     - host: test.laravel.com
       paths:
         - /
-    - host: admin.atemkeng.com
+    - host: admin.atemkeng.eu
       paths:
         - /
   tls: []
