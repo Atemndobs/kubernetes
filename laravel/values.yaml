@@ -254,9 +254,6 @@ ingress:
   # kubernetes.io/tls-acme: "true"
   # class: "nginx"
   hosts:
-    - host: test.laravel.com
-      paths:
-        - /
     - host: admin.atemkeng.eu
       paths:
         - /
