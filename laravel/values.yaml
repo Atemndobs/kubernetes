@@ -248,13 +248,16 @@ service:
   # Set annotations for the service.
 
 ingress:
-  enabled: false
+  enabled: true
   annotations: {}
     # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
+  # kubernetes.io/tls-acme: "true"
   # class: "nginx"
   hosts:
     - host: test.laravel.com
+      paths:
+        - /
+    - host: admin.atemkeng.com
       paths:
         - /
   tls: []
