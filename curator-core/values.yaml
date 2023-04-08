@@ -11,7 +11,7 @@ strategy: {}
   #   maxUnavailable: 1
 
 nameOverride: ""
-fullnameOverride: ""
+fullnameOverride: "curator-core"
 imagePullSecrets: []
 
 # Configure Laravel PHP-FPM container.
