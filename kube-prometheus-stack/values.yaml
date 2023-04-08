@@ -380,7 +380,7 @@ alertmanager:
 
     ## Service type
     ##
-    type: LoadBalancer
+    type: ClusterIP
 
   ## Configuration for creating a separate Service for each statefulset Alertmanager replica
   ##
