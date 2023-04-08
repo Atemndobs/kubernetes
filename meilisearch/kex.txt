@@ -1,0 +1,18 @@
+│ We collect anonymized analytics to improve our product and your experience. To learn more, including how to turn off analytics, │
+│                                                                                                                                 │
+│ Anonymous telemetry:    "Enabled"                                                                                               │
+│ Instance UID:        "3cb56120-14b8-437f-8457-3c6b8e4a7af5"                                                                     │
+│                                                                                                                                 │
+│ A master key has been set. Requests to Meilisearch won't be authorized unless you provide an authentication key.                │
+│                                                                                                                                 │
+│                                                                                                                                 │
+│  Meilisearch started with a master key considered unsafe for use in a production environment.                                   │
+│                                                                                                                                 │
+│  A master key of at least 16 bytes will be required when switching to a production environment.                                 │
+│                                                                                                                                 │
+│                                                                                                                                 │
+│ We generated a new secure master key for you (you can safely use this token):                                                   │
+│                                                                                                                                 │
+│ >> --master-key dyitJf52n9IPmDK6JQzzBYDDYDUOl6gqeV9OqsduGHg <<                                                                  │
+│                                                                                                                                 │
+│ Restart Meilisearch with the argument above to use this new and secure master key.
