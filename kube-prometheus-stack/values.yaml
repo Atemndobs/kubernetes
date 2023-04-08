@@ -774,6 +774,8 @@ grafana:
 
   adminPassword: prom-operator
 
+  type: LoadBalancer
+
   rbac:
     ## If true, Grafana PSPs will be created
     ##
@@ -782,7 +784,7 @@ grafana:
   ingress:
     ## If true, Grafana Ingress will be created
     ##
-    enabled: true
+    enabled: false
 
     ## IngressClassName for Grafana Ingress.
     ## Should be provided if Ingress is enable.
