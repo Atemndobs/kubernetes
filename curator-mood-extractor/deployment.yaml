@@ -1,16 +1,16 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: nest-app
+  name: curator-mood-extractor
   labels:
-    app.kubernetes.io/name: nest-app
-    app.kubernetes.io/instance: nest-app
+    app.kubernetes.io/name: curator-mood-extractor
+    app.kubernetes.io/instance: curator-mood-extractor
   namespace: curator
 spec:
   selector:
-    app: nest-app
-    app.kubernetes.io/name: nest-app
-    app.kubernetes.io/instance: nest-app
+    app: curator-mood-extractor
+    app.kubernetes.io/name: curator-mood-extractor
+    app.kubernetes.io/instance: curator-mood-extractor
   ports:
   - name: http
     protocol: TCP
@@ -29,25 +29,25 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nest-app
+  name: curator-mood-extractor
   labels:
-      app.kubernetes.io/name: nest-app
-      app.kubernetes.io/instance: nest-app
+      app.kubernetes.io/name: curator-mood-extractor
+      app.kubernetes.io/instance: curator-mood-extractor
   namespace: curator
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: nest-app
+      app: curator-mood-extractor
   template:
     metadata:
       labels:
-        app: nest-app
-        app.kubernetes.io/name: nest-app
-        app.kubernetes.io/instance: nest-app
+        app: curator-mood-extractor
+        app.kubernetes.io/name: curator-mood-extractor
+        app.kubernetes.io/instance: curator-mood-extractor
     spec:
       containers:
-      - name: nest-app
+      - name: curator-mood-extractor
         image: atemndobs/nestjs_api_prod:v2.1.1
         command: ["sh", "-c", "pm2 start dist/main.js --name nest --no-daemon && pm2 logs nest"]
         ports:

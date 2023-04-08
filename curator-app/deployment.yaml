@@ -1,16 +1,16 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: vue-app
+  name: curator-app
   labels:
-      app.kubernetes.io/name: vue-app
-      app.kubernetes.io/instance: vue-app
+      app.kubernetes.io/name: curator-app
+      app.kubernetes.io/instance: curator-app
   namespace: curator
 spec:
   selector:
-    app: vue-app
-    app.kubernetes.io/name: vue-app
-    app.kubernetes.io/instance: vue-app
+    app: curator-app
+    app.kubernetes.io/name: curator-app
+    app.kubernetes.io/instance: curator-app
   ports:
     - name: http
       protocol: TCP
@@ -24,25 +24,25 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: vue-app
+  name: curator-app
   labels:
-    app.kubernetes.io/name: vue-app
-    app.kubernetes.io/instance: vue-app
+    app.kubernetes.io/name: curator-app
+    app.kubernetes.io/instance: curator-app
   namespace: curator
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: vue-app
+      app: curator-app
   template:
     metadata:
       labels:
-        app: vue-app
-        app.kubernetes.io/name: vue-app
-        app.kubernetes.io/instance: vue-app
+        app: curator-app
+        app.kubernetes.io/name: curator-app
+        app.kubernetes.io/instance: curator-app
     spec:
       containers:
-        - name: vue-app
+        - name: curator-app
           image: atemndobs/music-player:v1.3
           command: ["sh", "-c", "npm run serve"]
           ports:
