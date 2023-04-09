@@ -45,7 +45,7 @@ items:
           containers:
             - name: curator-app
               image: atemndobs/music-player:v1.3.3
-              command: [ "sh", "-c", "pm2 start 'serve -s dist'"]
+              command: [ "sh", "-c", "pm2 start 'serve -s dist' --name nest --no-daemon && pm2 logs nest""]
               ports:
                 - containerPort: 8080
               imagePullPolicy: Always
