@@ -1,50 +1,52 @@
 apiVersion: v1
-kind: Service
-metadata:
-  name: curator-app
-  labels:
-      app.kubernetes.io/name: curator-app
-      app.kubernetes.io/instance: curator-app
-  namespace: curator
-spec:
-  selector:
-    app: curator-app
-    app.kubernetes.io/name: curator-app
-    app.kubernetes.io/instance: curator-app
-  ports:
-    - name: http
-      protocol: TCP
-      port: 8080
-      targetPort: 8080
-  type: LoadBalancer
-  # Set the fixed port for the LoadBalancer service
-  # loadBalancerIP: <your-external-IP>
-
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: curator-app
-  labels:
-    app.kubernetes.io/name: curator-app
-    app.kubernetes.io/instance: curator-app
-  namespace: curator
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: curator-app
-  template:
+kind: List
+items:
+  - apiVersion: v1
+    kind: Service
     metadata:
+      name: curator-app
       labels:
+        app.kubernetes.io/name: curator-app
+        app.kubernetes.io/instance: curator-app
+      namespace: curator
+    spec:
+      selector:
         app: curator-app
         app.kubernetes.io/name: curator-app
         app.kubernetes.io/instance: curator-app
+      ports:
+        - name: http
+          protocol: TCP
+          port: 8080
+          targetPort: 8080
+      type: LoadBalancer
+      # Set the fixed port for the LoadBalancer service
+      # loadBalancerIP: <your-external-IP>
+
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: curator-app
+      labels:
+        app.kubernetes.io/name: curator-app
+        app.kubernetes.io/instance: curator-app
+      namespace: curator
     spec:
-      containers:
-        - name: curator-app
-          image: atemndobs/music-player:v1.3.1
-          command: ["sh", "-c", "npm run serve"]
-          ports:
-            - containerPort: 8080
-          imagePullPolicy: Always
+      replicas: 1
+      selector:
+        matchLabels:
+          app: curator-app
+      template:
+        metadata:
+          labels:
+            app: curator-app
+            app.kubernetes.io/name: curator-app
+            app.kubernetes.io/instance: curator-app
+        spec:
+          containers:
+            - name: curator-app
+              image: atemndobs/music-player:v1.3.1
+              command: [ "sh", "-c", "npm run serve" ]
+              ports:
+                - containerPort: 8080
+              imagePullPolicy: Always
