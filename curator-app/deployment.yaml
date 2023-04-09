@@ -44,7 +44,7 @@ items:
         spec:
           containers:
             - name: curator-app
-              image: atemndobs/music-player:v1.3.3
+              image: atemndobs/music-player:v1.3.4
               command: [ "sh", "-c", "pm2 start 'serve -s dist' --name vue --no-daemon && pm2 logs vue"]
               ports:
                 - containerPort: 8080
