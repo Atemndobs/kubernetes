@@ -49,22 +49,22 @@ items:
               ports:
                 - containerPort: 8080
               imagePullPolicy: Always
-#  - apiVersion: monitoring.coreos.com/v1
-#    kind: ServiceMonitor
-#    metadata:
-#      name: curator-app-monitor
-#      namespace: curator
-#      labels:
-#        app.kubernetes.io/name: curator-app
-#        app.kubernetes.io/instance: curator-app
-#        release: prometheus
-#        app: prometheus
-#    spec:
-#      jobLabel: job
-#      selector:
-#        matchLabels:
-#          app: curator-app
-#      endpoints:
-#        - port: http
-#          path: /metrics
-#          interval: 30s
+  - apiVersion: monitoring.coreos.com/v1
+    kind: ServiceMonitor
+    metadata:
+      name: curator-app-monitor
+      namespace: curator
+      labels:
+        app.kubernetes.io/name: curator-app
+        app.kubernetes.io/instance: curator-app
+        release: prometheus
+        app: prometheus
+    spec:
+      jobLabel: job
+      selector:
+        matchLabels:
+          app: curator-app
+      endpoints:
+        - port: http
+          path: /metrics
+          interval: 30s
