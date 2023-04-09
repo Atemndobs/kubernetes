@@ -50,7 +50,7 @@ items:
         spec:
           containers:
             - name: curator-mood-extractor
-              image: atemndobs/nestjs_api_prod:v2.1.1
+              image: atemndobs/curator-mood-extractor:v1.0.0
               command: [ "sh", "-c", "pm2 start dist/main.js --name nest --no-daemon && pm2 logs nest" ]
               ports:
                 - containerPort: 3000
@@ -74,5 +74,5 @@ items:
           app: curator-mood-extractor
       endpoints:
         - port: http
-          path: /metrics
+          path: /swagger-stats/metrics
           interval: 30s
