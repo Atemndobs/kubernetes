@@ -43,7 +43,7 @@ spec:
     spec:
       containers:
         - name: curator-app
-          image: atemndobs/music-player:v1.3
+          image: atemndobs/music-player:v1.3.1
           command: ["sh", "-c", "npm run serve"]
           ports:
             - containerPort: 8080
