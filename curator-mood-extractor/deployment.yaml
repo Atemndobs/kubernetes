@@ -50,7 +50,7 @@ items:
         spec:
           containers:
             - name: curator-mood-extractor
-              image: atemndobs/curator-mood-extractor:v1.0.0
+              image: atemndobs/curator-mood-extractor:v1.0.2
               command: [ "sh", "-c", "pm2 start dist/main.js --name nest --no-daemon && pm2 logs nest" ]
               ports:
                 - containerPort: 3000
@@ -76,3 +76,27 @@ items:
         - port: http
           path: /swagger-stats/metrics
           interval: 30s
+
+  - apiVersion: monitoring.coreos.com/v1
+    kind: PrometheusRule
+    metadata:
+      name: curator-mood-extractor-alerts
+      namespace: curator
+      labels:
+        app.kubernetes.io/name: curator-mood-extractor
+        app.kubernetes.io/instance: curator-mood-extractor
+        release: prometheus
+        app: prometheus
+    spec:
+      groups:
+        - name: curator-mood-extractor.rules
+          rules:
+            - alert: CuratorMoodExtractorDown
+             # expr: absent(up{job="curator-mood-extractor"} == 1)
+              expr: up == 0
+              for: 0m
+              labels:
+                severity: critical
+              annotations:
+                summary: "CuratorMoodExtractor is down"
+                description: "CuratorMoodExtractor has been down for more than 1 minute. : Prometheus target {{ $labels.instance }} is down."
