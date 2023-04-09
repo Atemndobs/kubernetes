@@ -57,3 +57,22 @@ items:
                 - containerPort: 9229
               imagePullPolicy: Always
 
+  - apiVersion: monitoring.coreos.com/v1
+    kind: ServiceMonitor
+    metadata:
+      name: curator-mood-extractor-monitor
+      namespace: curator
+      labels:
+        app.kubernetes.io/name: curator-mood-extractor
+        app.kubernetes.io/instance: curator-mood-extractor
+        release: prometheus
+        app: prometheus
+    spec:
+      jobLabel: job
+      selector:
+        matchLabels:
+          app: curator-mood-extractor
+      endpoints:
+        - port: http
+          path: /metrics
+          interval: 30s
