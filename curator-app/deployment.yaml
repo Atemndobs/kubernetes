@@ -45,7 +45,7 @@ items:
           containers:
             - name: curator-app
               image: atemndobs/music-player:v1.3.3
-              command: [ "sh", "-c", "pwd" ]
+              command: [ "sh", "-c", "tail -f ." ]
               ports:
                 - containerPort: 8080
               imagePullPolicy: Always
