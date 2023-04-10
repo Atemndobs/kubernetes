@@ -15562,7 +15562,7 @@ subjects:
 apiVersion: v1
 data:
   admin.enabled: "true"
-  admin.password: atem
+  admin.password: Atemkeng2022
 
 kind: ConfigMap
 metadata:
