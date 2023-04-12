@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: curator-mood-extractor
+  namespace: curator
+  labels:
+    app.kubernetes.io/name: curator-mood-extractor
+    app.kubernetes.io/instance: curator-mood-extractor
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: mood.curator.atemkeng.eu
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: curator-mood-extractor
+              port:
+                number: 3000
+#        - path: /swagger-stats
+#          pathType: Prefix
+#          backend:
+#            service:
+#              name: curator-mood-extractor
+#              port:
+#                number: 3000

@@ -1,0 +1,102 @@
+apiVersion: v1
+kind: List
+items:
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: curator-mood-extractor
+      namespace: curator
+      labels:
+        app.kubernetes.io/name: curator-mood-extractor
+        app.kubernetes.io/instance: curator-mood-extractor
+    spec:
+      selector:
+        app: curator-mood-extractor
+        app.kubernetes.io/name: curator-mood-extractor
+        app.kubernetes.io/instance: curator-mood-extractor
+      ports:
+        - name: http
+          protocol: TCP
+          port: 3000
+          targetPort: 3000
+        #    nodePort: 31200
+        - name: debug
+          protocol: TCP
+          port: 9229
+          targetPort: 9229
+      type: ClusterIP
+      # Set the fixed port for the LoadBalancer service
+      # loadBalancerIP: <your-external-IP>
+
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: curator-mood-extractor
+      labels:
+        app.kubernetes.io/name: curator-mood-extractor
+        app.kubernetes.io/instance: curator-mood-extractor
+      namespace: curator
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          app: curator-mood-extractor
+      template:
+        metadata:
+          labels:
+            app: curator-mood-extractor
+            app.kubernetes.io/name: curator-mood-extractor
+            app.kubernetes.io/instance: curator-mood-extractor
+        spec:
+          containers:
+            - name: curator-mood-extractor
+              image: atemndobs/curator-mood-extractor:v1.0.2
+              command: [ "sh", "-c", "pm2 start dist/main.js --name nest --no-daemon && pm2 logs nest" ]
+              ports:
+                - containerPort: 3000
+                - containerPort: 9229
+              imagePullPolicy: Always
+
+#  - apiVersion: monitoring.coreos.com/v1
+#    kind: ServiceMonitor
+#    metadata:
+#      name: curator-mood-extractor-monitor
+#      namespace: curator
+#      labels:
+#        app.kubernetes.io/name: curator-mood-extractor
+#        app.kubernetes.io/instance: curator-mood-extractor
+#        release: prometheus
+#        app: prometheus
+#    spec:
+#      jobLabel: job
+#      selector:
+#        matchLabels:
+#          app: curator-mood-extractor
+#      endpoints:
+#        - port: http
+#          path: /swagger-stats/metrics
+#          interval: 30s
+#
+#  - apiVersion: monitoring.coreos.com/v1
+#    kind: PrometheusRule
+#    metadata:
+#      name: curator-mood-extractor-alerts
+#      namespace: curator
+#      labels:
+#        app.kubernetes.io/name: curator-mood-extractor
+#        app.kubernetes.io/instance: curator-mood-extractor
+#        release: prometheus
+#        app: prometheus
+#    spec:
+#      groups:
+#        - name: curator-mood-extractor.rules
+#          rules:
+#            - alert: CuratorMoodExtractorDown
+#             # expr: absent(up{job="curator-mood-extractor"} == 1)
+#              expr: up == 0
+#              for: 0m
+#              labels:
+#                severity: critical
+#              annotations:
+#                summary: "CuratorMoodExtractor is down"
+#                description: "CuratorMoodExtractor has been down for more than 1 minute. : Prometheus target {{ $labels.instance }} is down."

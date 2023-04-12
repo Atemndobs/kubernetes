@@ -1,0 +1,47 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: {{ include "maxscale.fullname" . }}-masteronly
+  namespace: curator
+  labels:
+    app.kubernetes.io/name: {{ include "maxscale.name" . }}
+    helm.sh/chart: {{ include "maxscale.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - maxscale.curator.atemkeng.eu
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ include "maxscale.fullname" . }}-masteronly
+  namespace: curator
+  labels:
+    app.kubernetes.io/name: {{ include "maxscale.name" . }}
+    helm.sh/chart: {{ include "maxscale.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  hosts:
+    - maxscale.curator.atemkeng.eu
+  gateways:
+    - {{ include "maxscale.fullname" . }}-masteronly
+  http:
+    - match:
+        - uri:
+            prefix: /
+      route:
+        - destination:
+            host: {{ include "maxscale.fullname" . }}-masteronly
+            port:
+              number: 8989
+
+# port name maxadmin

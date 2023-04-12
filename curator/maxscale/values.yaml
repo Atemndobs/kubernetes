@@ -1,0 +1,110 @@
+# Default values for maxscale.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# -- IP or Hostname of the 1. Galera node
+db1Address: mariadb-galera-0.mariadb-galera-headless.curator.svc.cluster.local
+# -- IP or Hostname of the 2. Galera node
+db2Address: mariadb-galera-1.mariadb-galera-headless.curator.svc.cluster.local
+# -- IP or Hostname of the 3. Galera node
+db3Address: mariadb-galera-2.mariadb-galera-headless.curator.svc.cluster.local
+
+mariadb:
+  replicaCount: 3
+  rootUser:
+    forcePassword: true
+    password: "mage"
+  db:
+    forcePassword: true
+    password: "mage"
+  galera:
+    mariabackup:
+      forcePassword: true
+      password: "mage"
+# -- MaxScale service user name
+serviceUser: mage
+# -- MaxScale service user password
+servicePassword: mage
+# -- MaxScale monitor user name
+monitorUser: mage
+# -- MaxScale monitor user password
+monitorPassword: mage
+# -- MaxScale root user name
+rootUser: mage
+# -- MaxScale root user password
+rootPassword: mage
+
+maxscaleUser: admin
+maxscalePassword: mariadb
+## MaxScale passwords using an existing secret
+## The secret needs the keys 'service-password' and 'monitor-password'
+# existingSecret: secret
+
+replicaCount: 1
+
+image:
+  registry: docker.io
+  repository: mariadb/maxscale
+  tag: 22.08.5
+  pullPolicy: IfNotPresent
+#  repository: docker.io/appuio/maxscale
+#  tag: 2.2.20
+#  pullPolicy: IfNotPresent
+
+nameOverride: "maxscale"
+fullnameOverride: "maxscale"
+
+service:
+  type: ClusterIP
+  port:
+    - 3306 : 3306
+    - 8989 : 8989
+
+livenessProbe:
+  enabled: false
+  failureThreshold: 3
+  periodSeconds: 10
+  successThreshold: 1
+  timeoutSeconds: 5
+  initialDelaySeconds: 2
+
+readinessProbe:
+  enabled: false
+  failureThreshold: 3
+  periodSeconds: 1
+  successThreshold: 1
+  timeoutSeconds: 1
+  initialDelaySeconds: 0
+
+resources: {}
+# We usually recommend not to specify default resources and to leave
+# this as a conscious choice for the user. This also increases chances
+# charts run on environments with little resources, such as Minikube.
+# If you do want to specify resources, uncomment the following lines,
+# adjust them as necessary, and remove the curly braces after
+# 'resources:'.
+#  requests:
+#    cpu: '1'
+#    memory: 128Mi
+#  limits:
+#    memory: 512Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+# Prometheus Metrics Exporter
+metrics:
+  enabled: false
+  image:
+    repository: skord/maxscale_exporter
+    tag: latest
+    pullPolicy: IfNotPresent
+  resources: {}
+  # Same as above...
+  #  requests:
+  #    memory: 16Mi
+  #  limits:
+  #    memory: 64Mi

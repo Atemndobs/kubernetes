@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: curator-app
+  namespace: curator
+  labels:
+    app.kubernetes.io/name: curator-app
+    app.kubernetes.io/instance: curator-app
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: app.curator.atemkeng.eu
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: curator-app
+              port:
+                number: 8080
+#        - path: /swagger-stats
+#          pathType: Prefix
+#          backend:
+#            service:
+#              name: curator-app
+#              port:
+#                number: 3000

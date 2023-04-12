@@ -1,0 +1,62 @@
+
+{{- $fullName := .Values.name -}}
+{{- $svcPort := .Values.sentinel.service.ports.redis -}}
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: {{ printf "%s-headless" (include "common.names.fullname" .) }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations:
+    {{- if .Values.sentinel.service.headless.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.sentinel.service.headless.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- include "redis.externalDNS.annotations" . | nindent 4 }}
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - redis.curator.atemkeng.eu
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ printf "%s-headless" (include "common.names.fullname" .) }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations:
+    {{- if .Values.sentinel.service.headless.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.sentinel.service.headless.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- include "redis.externalDNS.annotations" . | nindent 4 }}
+spec:
+  hosts:
+    - redis.curator.atemkeng.eu
+  gateways:
+    - {{ $fullName }}
+  http:
+    - match:
+        - uri:
+            prefix: /
+      route:
+        - destination:
+            host: {{ $fullName }}
+            port:
+              number: {{ $svcPort }}
