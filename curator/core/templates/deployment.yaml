@@ -16,6 +16,7 @@ spec:
     matchLabels:
       {{- include "laravel.selectorLabels" . | nindent 6 }}
       laravel.com/pod-type: web
+      app: {{ include "laravel.name" . }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
