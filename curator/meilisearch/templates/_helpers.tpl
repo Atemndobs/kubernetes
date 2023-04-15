@@ -39,6 +39,7 @@ helm.sh/chart: {{ include "meilisearch.chart" . }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 app.kubernetes.io/part-of: meilisearch
 app.kubernetes.io/instance: {{ .Release.Name }}
+app: {{ include "meilisearch.name" . }}
 {{- end }}
 
 {{/*
