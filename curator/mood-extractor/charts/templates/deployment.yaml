@@ -49,7 +49,6 @@ items:
         namespace: curator
         labels:
           app.kubernetes.io/name: curator-mood-extractor
-          app.kubernetes.io/instance: curator-mood-extractor
       spec:
         containers:
         - command:
