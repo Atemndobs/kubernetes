@@ -12,12 +12,14 @@ spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ include "maxscale.name" . }}
+      app.kubernetes.io/name: {{ include "maxscale.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
         app.kubernetes.io/name: {{ include "maxscale.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
+        app: {{ include "maxscale.name" . }}
       annotations:
         prometheus.io/port: "9195"
         prometheus.io/scheme: http
