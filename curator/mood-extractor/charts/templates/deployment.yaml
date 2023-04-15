@@ -48,7 +48,7 @@ items:
         name: curator-mood-extractor
         namespace: curator
         labels:
-          app.kubernetes.io/name: curator-mood-extractor
+          helm.sh/chart: {{ include "charts.chart" . }}
       spec:
         containers:
         - command:
