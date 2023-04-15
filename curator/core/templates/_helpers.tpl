@@ -48,6 +48,7 @@ Selector labels
 {{- define "laravel.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "laravel.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
+app: {{ include "laravel.name" . }}
 {{- end }}
 
 {{/*
