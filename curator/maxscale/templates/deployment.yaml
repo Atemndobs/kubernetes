@@ -14,6 +14,7 @@ spec:
     matchLabels:
       app.kubernetes.io/name: {{ include "maxscale.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
+      app: {{ include "maxscale.name" . }}
   template:
     metadata:
       labels:
