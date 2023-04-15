@@ -43,7 +43,5 @@ spec:
       port: {{ .Values.service.ports.manager  }}
       targetPort: stats
     {{- end }}
-  selector:
-    matchLabels:
-      {{- include "common.labels.matchLabels" . | nindent 6 }}
+  selector: {{ include "common.labels.matchLabels" . | nindent 4 }}
   publishNotReadyAddresses: true
