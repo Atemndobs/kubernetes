@@ -1,0 +1,37 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: {{ include "curator-app.fullname" . }}-curator-app
+  labels:
+  {{- include "curator-app.labels" . | nindent 4 }}
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - hosts:
+    - app.curator.atemkeng.eu
+    port:
+      name: http
+      number: 80
+      protocol: HTTP
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ include "curator-app.fullname" . }}-curator-app
+  labels:
+  {{- include "curator-app.labels" . | nindent 4 }}
+spec:
+  gateways:
+  - curator-app
+  hosts:
+  - app.curator.atemkeng.eu
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: curator-app
+        port:
+          number: 8080

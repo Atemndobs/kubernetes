@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: List
+metadata:
+  name: {{ include "curator-app.fullname" . }}-
+  labels:
+  {{- include "curator-app.labels" . | nindent 4 }}
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app.kubernetes.io/instance: curator-app
+      app.kubernetes.io/name: curator-app
+    name: curator-app
+    namespace: curator
+  spec:
+    ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      app: curator-app
+      app.kubernetes.io/instance: curator-app
+      app.kubernetes.io/name: curator-app
+    type: ClusterIP
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    labels:
+      app.kubernetes.io/instance: curator-app
+      app.kubernetes.io/name: curator-app
+    name: curator-app
+    namespace: curator
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: curator-app
+    template:
+      metadata:
+        labels:
+          app: curator-app
+          app.kubernetes.io/instance: curator-app
+          app.kubernetes.io/name: curator-app
+      spec:
+        containers:
+        - command:
+          - sh
+          - -c
+          - pm2 start 'serve -s dist' --name vue --no-daemon && pm2 logs vue
+          image: atemndobs/music-player:v1.3.5
+          imagePullPolicy: Always
+          name: curator-app
+          ports:
+          - containerPort: 8080

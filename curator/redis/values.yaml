@@ -20,7 +20,7 @@ global:
   imagePullSecrets: []
   storageClass: ""
   redis:
-    password: ""
+    password: "mage"  # This is the default password for the Redis&reg; chart
 
 ## @section Common parameters
 ##
@@ -867,13 +867,13 @@ replica:
     annotations: {}
     ## @param replica.persistence.labels Additional custom labels for the PVC
     ##
-    labels: {}
+    labels:
     ## @param replica.persistence.selector Additional labels to match for the PVC
     ## e.g:
-    ## selector:
-    ##   matchLabels:
-    ##     app: my-app
-    ##
+#      selector:
+#        matchLabels:
+#          app: my-app
+
     selector: {}
     ## @param replica.persistence.dataSource Custom PVC data source
     ##
