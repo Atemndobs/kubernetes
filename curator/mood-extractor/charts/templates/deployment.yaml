@@ -7,7 +7,6 @@ metadata:
     app.kubernetes.io/name: curator-mood-extractor
     app.kubernetes.io/instance: curator-mood-extractor
     app.kubernetes.io/managed-by: {{ .Release.Service }}
-    helm.sh/chart: {{ include "charts.chart" . }}
 items:
 - apiVersion: v1
   kind: Service
@@ -18,7 +17,6 @@ items:
       app.kubernetes.io/name: curator-mood-extractor
       app.kubernetes.io/instance: curator-mood-extractor
       app.kubernetes.io/managed-by: {{ .Release.Service }}
-      helm.sh/chart: {{ include "charts.chart" . }}
   spec:
     ports:
     - name: http
@@ -43,7 +41,6 @@ items:
       app.kubernetes.io/name: curator-mood-extractor
       app.kubernetes.io/instance: curator-mood-extractor
       app.kubernetes.io/managed-by: {{ .Release.Service }}
-      helm.sh/chart: {{ include "charts.chart" . }}
   spec:
     replicas: 1
     selector:
@@ -57,7 +54,6 @@ items:
           app.kubernetes.io/name: curator-mood-extractor
           app.kubernetes.io/instance: curator-mood-extractor
           app.kubernetes.io/managed-by: {{ .Release.Service }}
-          helm.sh/chart: {{ include "charts.chart" . }}
       spec:
         containers:
         - command:
