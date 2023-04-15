@@ -1,9 +1,11 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
-  name: {{ include "charts.fullname" . }}
+  name: curator-mood-extractor
+  namespace: curator
   labels:
-  {{- include "charts.labels" . | nindent 4 }}
+    app.kubernetes.io/name: curator-mood-extractor
+    app.kubernetes.io/instance: curator-mood-extractor
 spec:
   selector:
     istio: ingressgateway
@@ -19,9 +21,11 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: {{ include "charts.fullname" . }}
+  name: curator-mood-extractor
+  namespace: curator
   labels:
-  {{- include "charts.labels" . | nindent 4 }}
+    app.kubernetes.io/name: curator-mood-extractor
+    app.kubernetes.io/instance: curator-mood-extractor
 spec:
   gateways:
   - curator-mood-extractor
