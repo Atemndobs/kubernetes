@@ -6,6 +6,8 @@ metadata:
   labels:
     app.kubernetes.io/name: curator-mood-extractor
     app.kubernetes.io/instance: curator-mood-extractor
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    helm.sh/chart: {{ include "charts.chart" . }}
 items:
 - apiVersion: v1
   kind: Service
