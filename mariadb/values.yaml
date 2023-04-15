@@ -570,7 +570,7 @@ secondary:
   name: secondary
   ## @param secondary.replicaCount Number of MariaDB secondary replicas
   ##
-  replicaCount: 1
+  replicaCount: 3
   ## @param secondary.command Override default container command on MariaDB Secondary container(s) (useful when using custom images)
   ##
   command: []
@@ -1177,7 +1177,7 @@ metrics:
     enabled: false
     ## @param metrics.serviceMonitor.namespace Namespace which Prometheus is running in
     ##
-    namespace: ""
+    namespace: "curator"
     ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
     ##
     jobLabel: ""
@@ -1209,7 +1209,8 @@ metrics:
     selector: {}
     ## @param metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
     ##
-    labels: {}
+    labels:
+      app: mariadb
   ## Prometheus Operator PrometheusRule configuration
   ##
   prometheusRule:
