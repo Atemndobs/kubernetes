@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: List
 metadata:
-  name: {{ include "charts.fullname" . }}-
+  name: {{ include "charts.fullname" . }}
   labels:
   {{- include "charts.labels" . | nindent 4 }}
 items:
 - apiVersion: v1
   kind: Service
-  metadata:
-    labels:
-      app.kubernetes.io/instance: curator-mood-extractor
-      app.kubernetes.io/name: curator-mood-extractor
+    metadata:
+      name: {{ include "charts.fullname" . }}
+      labels:
+      {{- include "charts.labels" . | nindent 4 }}
     name: curator-mood-extractor
     namespace: curator
   spec:
@@ -30,10 +30,10 @@ items:
     type: ClusterIP
 - apiVersion: apps/v1
   kind: Deployment
-  metadata:
-    labels:
-      app.kubernetes.io/instance: curator-mood-extractor
-      app.kubernetes.io/name: curator-mood-extractor
+    metadata:
+      name: {{ include "charts.fullname" . }}
+      labels:
+      {{- include "charts.labels" . | nindent 4 }}
     name: curator-mood-extractor
     namespace: curator
   spec:
@@ -43,10 +43,10 @@ items:
         app: curator-mood-extractor
     template:
       metadata:
+        name: {{ include "charts.fullname" . }}
+        app: curator-mood-extractor
         labels:
-          app: curator-mood-extractor
-          app.kubernetes.io/instance: curator-mood-extractor
-          app.kubernetes.io/name: curator-mood-extractor
+        {{- include "charts.labels" . | nindent 4 }}
       spec:
         containers:
         - command:

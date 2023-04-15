@@ -1,12 +1,13 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
-  name: {{ include "charts.fullname" . }}-curator-mood-extractor
+  name: {{ include "charts.fullname" . }}
   labels:
   {{- include "charts.labels" . | nindent 4 }}
 spec:
   selector:
     istio: ingressgateway
+    app: {{ include "charts.name" . }}
   servers:
   - hosts:
     - mood.curator.atemkeng.eu
@@ -18,7 +19,7 @@ spec:
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
-  name: {{ include "charts.fullname" . }}-curator-mood-extractor
+  name: {{ include "charts.fullname" . }}
   labels:
   {{- include "charts.labels" . | nindent 4 }}
 spec:
