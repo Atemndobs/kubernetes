@@ -1,0 +1,39 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: {{ include "charts.fullname" . }}-curator-mood-extractor
+  labels:
+  {{- include "charts.labels" . | nindent 4 }}
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - hosts:
+    - mood.curator.atemkeng.eu
+    port:
+      name: http
+      number: 80
+      protocol: HTTP
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ include "charts.fullname" . }}-curator-mood-extractor
+  labels:
+  {{- include "charts.labels" . | nindent 4 }}
+spec:
+  gateways:
+  - curator-mood-extractor
+  hosts:
+  - mood.curator.atemkeng.eu
+  http:
+  - match:
+    - uri:
+        prefix: /song
+    - uri:
+        prefix: /swagger-stats
+    route:
+    - destination:
+        host: curator-mood-extractor
+        port:
+          number: 3000

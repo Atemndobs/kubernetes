@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: List
+metadata:
+  name: {{ include "charts.fullname" . }}-
+  labels:
+  {{- include "charts.labels" . | nindent 4 }}
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app.kubernetes.io/instance: curator-mood-extractor
+      app.kubernetes.io/name: curator-mood-extractor
+    name: curator-mood-extractor
+    namespace: curator
+  spec:
+    ports:
+    - name: http
+      port: 3000
+      protocol: TCP
+      targetPort: 3000
+    - name: debug
+      port: 9229
+      protocol: TCP
+      targetPort: 9229
+    selector:
+      app: curator-mood-extractor
+      app.kubernetes.io/instance: curator-mood-extractor
+      app.kubernetes.io/name: curator-mood-extractor
+    type: ClusterIP
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    labels:
+      app.kubernetes.io/instance: curator-mood-extractor
+      app.kubernetes.io/name: curator-mood-extractor
+    name: curator-mood-extractor
+    namespace: curator
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: curator-mood-extractor
+    template:
+      metadata:
+        labels:
+          app: curator-mood-extractor
+          app.kubernetes.io/instance: curator-mood-extractor
+          app.kubernetes.io/name: curator-mood-extractor
+      spec:
+        containers:
+        - command:
+          - sh
+          - -c
+          - pm2 start dist/main.js --name nest --no-daemon && pm2 logs nest
+          image: atemndobs/curator-mood-extractor:v1.0.2
+          imagePullPolicy: Always
+          name: curator-mood-extractor
+          ports:
+          - containerPort: 3000
+          - containerPort: 9229
