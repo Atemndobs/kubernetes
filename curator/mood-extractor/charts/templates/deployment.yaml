@@ -47,8 +47,6 @@ items:
       metadata:
         name: curator-mood-extractor
         namespace: curator
-        labels:
-          helm.sh/chart: {{ include "charts.chart" . }}
       spec:
         containers:
         - command:
