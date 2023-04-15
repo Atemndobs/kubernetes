@@ -6,7 +6,6 @@ metadata:
   labels:
     app.kubernetes.io/name: curator-mood-extractor
     app.kubernetes.io/instance: curator-mood-extractor
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
 items:
 - apiVersion: v1
   kind: Service
@@ -16,7 +15,6 @@ items:
     labels:
       app.kubernetes.io/name: curator-mood-extractor
       app.kubernetes.io/instance: curator-mood-extractor
-      app.kubernetes.io/managed-by: {{ .Release.Service }}
   spec:
     ports:
     - name: http
@@ -40,7 +38,6 @@ items:
     labels:
       app.kubernetes.io/name: curator-mood-extractor
       app.kubernetes.io/instance: curator-mood-extractor
-      app.kubernetes.io/managed-by: {{ .Release.Service }}
   spec:
     replicas: 1
     selector:
@@ -53,7 +50,6 @@ items:
         labels:
           app.kubernetes.io/name: curator-mood-extractor
           app.kubernetes.io/instance: curator-mood-extractor
-          app.kubernetes.io/managed-by: {{ .Release.Service }}
       spec:
         containers:
         - command:
