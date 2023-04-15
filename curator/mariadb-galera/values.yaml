@@ -877,7 +877,7 @@ metrics:
     enabled: false
     ## @param metrics.serviceMonitor.namespace Optional namespace which Prometheus is running in
     ##
-    namespace: ""
+    namespace: "default"
     ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
     ##
     jobLabel: ""
@@ -920,7 +920,8 @@ metrics:
     honorLabels: false
     ## @param metrics.serviceMonitor.labels ServiceMonitor extra labels
     ##
-    labels: {}
+    labels:
+      app: mariadb-galera
 
   ## Prometheus Operator PrometheusRule configuration
   ##
