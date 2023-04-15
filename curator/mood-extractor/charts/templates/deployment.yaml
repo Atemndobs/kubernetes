@@ -50,14 +50,14 @@ items:
       matchLabels:
         app: curator-mood-extractor
     template:
-    metadata:
-      name: curator-mood-extractor
-      namespace: curator
-      labels:
-        app.kubernetes.io/name: curator-mood-extractor
-        app.kubernetes.io/instance: curator-mood-extractor
-        app.kubernetes.io/managed-by: {{ .Release.Service }}
-        helm.sh/chart: {{ include "charts.chart" . }}
+      metadata:
+        name: curator-mood-extractor
+        namespace: curator
+        labels:
+          app.kubernetes.io/name: curator-mood-extractor
+          app.kubernetes.io/instance: curator-mood-extractor
+          app.kubernetes.io/managed-by: {{ .Release.Service }}
+          helm.sh/chart: {{ include "charts.chart" . }}
       spec:
         containers:
         - command:
