@@ -10,12 +10,9 @@ spec:
     istio: ingressgateway # use istio default controller
   servers:
     ports:
-      {{- $appProtocolAvailable := (semverCompare ">=1.20-0" (include "common.capabilities.kubeVersion" .)) }}
-    - number: 4567
-      name: galera
-      {{- if $appProtocolAvailable }}
-      protocol: mysql
-      {{- end }}
+      - number: 3306
+        name: mysql
+        protocol: mysql
     hosts:
       - mariadb.curator.atemkeng.eu
 ---
