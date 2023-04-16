@@ -18,6 +18,25 @@ spec:
         {{- end }}
       hosts:
         - mariadb.curator.atemkeng.eu
+        - db-mariadb-galera-0.db-mariadb-galera-headless.curator.svc.cluster.local
+    - port:
+        number: 4568
+        name: ist
+        {{- if $appProtocolAvailable }}
+        protocol: mysql
+        {{- end }}
+      hosts:
+        - mariadb.curator.atemkeng.eu
+        - db-mariadb-galera-1.db-mariadb-galera-headless.curator.svc.cluster.local
+    - port:
+        number: 4444
+        name: sst
+        {{- if $appProtocolAvailable }}
+        protocol: mysql
+        {{- end }}
+      hosts:
+        - mariadb.curator.atemkeng.eu
+        - db-mariadb-galera-2.db-mariadb-galera-headless.curator.svc.cluster.local
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
