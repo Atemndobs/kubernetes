@@ -9,12 +9,15 @@ spec:
   selector:
     istio: ingressgateway # use istio default controller
   servers:
-    ports:
-      - number: 3306
-        name: mysql
+    {{- $appProtocolAvailable := (semverCompare ">=1.20-0" (include "common.capabilities.kubeVersion" .)) }}
+    - port:
+        number: 4567
+        name: galera
+        {{- if $appProtocolAvailable }}
         protocol: mysql
-    hosts:
-      - mariadb.curator.atemkeng.eu
+        {{- end }}
+      hosts:
+        - mariadb.curator.atemkeng.eu
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
