@@ -2,12 +2,14 @@ apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
   name: {{ include "curator-app.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels:
     app.kubernetes.io/name: curator-app
     app.kubernetes.io/instance: curator-app
     helm.sh/chart: {{ include "curator-app.chart" . }}
     app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app: curator-app
 spec:
   selector:
     istio: ingressgateway
@@ -23,12 +25,14 @@ apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: {{ include "curator-app.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels:
     app.kubernetes.io/name: curator-app
     app.kubernetes.io/instance: curator-app
     helm.sh/chart: {{ include "curator-app.chart" . }}
     app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app: curator-app
 spec:
   gateways:
   - curator-app
