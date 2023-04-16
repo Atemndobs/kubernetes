@@ -40,4 +40,8 @@ spec:
       appProtocol: mysql
       {{- end }}
   publishNotReadyAddresses: {{ .Values.service.headless.publishNotReadyAddresses }}
-  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+  selector:
+      app.kubernetes.io/name: {{ include "common.names.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app:  {{ include "common.names.name" . }}
+
