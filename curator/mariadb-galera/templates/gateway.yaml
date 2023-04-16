@@ -3,11 +3,8 @@ kind: Gateway
 metadata:
   name: {{ printf "%s-headless" (include "common.names.fullname" .) }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-  {{- if .Values.commonLabels }}
-  {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
-  {{- end }}
-  {{- if or .Values.service.headless.annotations .Values.commonAnnotations }}
+  labels:
+    app.kubernetes.io/name: {{ printf "%s-headless" (include "common.names.fullname" .) }}
 spec:
   selector:
     istio: ingressgateway # use istio default controller
@@ -39,11 +36,8 @@ kind: VirtualService
 metadata:
   name: {{ printf "%s-headless" (include "common.names.fullname" .) }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-  {{- if .Values.commonLabels }}
-  {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
-  {{- end }}
-  {{- if or .Values.service.headless.annotations .Values.commonAnnotations }}
+  labels:
+    app.kubernetes.io/name: {{ printf "%s-headless" (include "common.names.fullname" .) }}
 spec:
   hosts:
     - mariadb.curator.atemkeng.eu
