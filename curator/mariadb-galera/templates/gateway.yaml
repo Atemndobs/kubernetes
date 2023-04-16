@@ -16,6 +16,12 @@ spec:
         {{- if $appProtocolAvailable }}
         protocol: mysql
         {{- end }}
+    - port:
+        number: 4568
+        name: ist
+        {{- if $appProtocolAvailable }}
+        protocol: mysql
+        {{- end }}
       hosts:
         - mariadb.curator.atemkeng.eu
 ---
