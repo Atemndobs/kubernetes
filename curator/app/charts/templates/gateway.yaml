@@ -5,6 +5,9 @@ metadata:
   labels:
     app.kubernetes.io/name: curator-app
     app.kubernetes.io/instance: curator-app
+    helm.sh/chart: {{ include "curator-app.chart" . }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
   selector:
     istio: ingressgateway
@@ -23,6 +26,9 @@ metadata:
   labels:
     app.kubernetes.io/name: curator-app
     app.kubernetes.io/instance: curator-app
+    helm.sh/chart: {{ include "curator-app.chart" . }}
+    app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
   gateways:
   - curator-app
