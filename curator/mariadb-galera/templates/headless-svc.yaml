@@ -40,6 +40,4 @@ spec:
       appProtocol: mysql
       {{- end }}
   publishNotReadyAddresses: {{ .Values.service.headless.publishNotReadyAddresses }}
-  selector:
-  {{- include "common.labels.matchLabels" . | nindent 4 }}
-      app: {{ include "common.names.fullname" . }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
