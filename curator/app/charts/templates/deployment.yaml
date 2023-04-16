@@ -10,7 +10,8 @@ items:
     metadata:
       name: {{ include "curator-app.fullname" . }}
       labels:
-      {{- include "curator-app.labels" . | nindent 4 }}
+        app.kubernetes.io/name: curator-app
+        app.kubernetes.io/instance: curator-app
     name: curator-app
     namespace: curator
   spec:
@@ -21,14 +22,17 @@ items:
       targetPort: 8080
     selector:
       app: curator-app
-      {{- include "curator-app.labels" . | nindent 4 }}
+      labels:
+        app.kubernetes.io/name: curator-app
+        app.kubernetes.io/instance: curator-app
     type: ClusterIP
 - apiVersion: apps/v1
   kind: Deployment
     metadata:
       name: {{ include "curator-app.fullname" . }}
       labels:
-      {{- include "curator-app.labels" . | nindent 4 }}
+        app.kubernetes.io/name: curator-app
+        app.kubernetes.io/instance: curator-app
     name: curator-app
     namespace: curator
   spec:
@@ -39,8 +43,9 @@ items:
     template:
       metadata:
         name: {{ include "curator-app.fullname" . }}
-        labels:
-        {{- include "curator-app.labels" . | nindent 4 }}
+      labels:
+        app.kubernetes.io/name: curator-app
+        app.kubernetes.io/instance: curator-app
       spec:
         containers:
         - command:
