@@ -23,7 +23,7 @@ spec:
         number: 4568
         name: ist
         {{- if $appProtocolAvailable }}
-        appProtocol: mysql
+        protocol: mysql
         {{- end }}
       hosts:
         - mariadb.curator.atemkeng.eu
