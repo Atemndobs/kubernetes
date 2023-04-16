@@ -3,7 +3,8 @@ kind: Gateway
 metadata:
   name: {{ include "curator-app.fullname" . }}
   labels:
-  {{- include "curator-app.labels" . | nindent 4 }}
+    app.kubernetes.io/name: curator-app
+    app.kubernetes.io/instance: curator-app
 spec:
   selector:
     istio: ingressgateway
