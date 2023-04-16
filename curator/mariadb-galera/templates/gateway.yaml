@@ -13,7 +13,6 @@ spec:
     - port:
         number: 4567
         name: galera
-        targetPort: galera
         {{- if $appProtocolAvailable }}
         protocol: mysql
         {{- end }}
