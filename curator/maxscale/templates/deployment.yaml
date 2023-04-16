@@ -70,7 +70,7 @@ spec:
                   name: {{ template "maxscale.secretName" . }}
                   key: monitor-password
             - name: MAXSCALE_USER
-              value: {{ .Values.maxscaleUser }}}
+              value: {{ .Values.maxscaleUser }}
             - name: MAXSCALE_PASSWORD
               value: {{ .Values.maxscalePassword }}
           ports:
