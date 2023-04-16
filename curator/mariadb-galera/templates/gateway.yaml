@@ -23,7 +23,6 @@ spec:
         number: 4568
         name: ist
         {{- if $appProtocolAvailable }}
-        protocol: mysql
         appProtocol: mysql
         {{- end }}
       hosts:
