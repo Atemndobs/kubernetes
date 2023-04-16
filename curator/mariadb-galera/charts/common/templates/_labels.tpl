@@ -15,5 +15,4 @@ Labels to use on deploy.spec.selector.matchLabels and svc.spec.selector
 {{- define "common.labels.matchLabels" -}}
 app.kubernetes.io/name: {{ include "common.names.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
-app: {{ include "common.names.name" . }}
 {{- end -}}
