@@ -24,6 +24,7 @@ spec:
         name: ist
         {{- if $appProtocolAvailable }}
         protocol: mysql
+        appProtocol: mysql
         {{- end }}
       hosts:
         - mariadb.curator.atemkeng.eu
