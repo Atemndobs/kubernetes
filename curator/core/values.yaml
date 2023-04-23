@@ -71,7 +71,7 @@ app:
   # for Prometheus to scrape.
   # Read more: https://github.com/hipages/php-fpm_exporter
   exporter:
-    enabled: false
+    enabled: true
 
     image:
       repository: hipages/php-fpm_exporter
@@ -229,7 +229,10 @@ rbac:
   #      - get
   #      - list
 
-podAnnotations: {}
+podAnnotations: {
+    "prometheus.io/scrape": "true",
+    "prometheus.io/port": "9113"
+}
 
 podSecurityContext: {}
   # fsGroup: 2000

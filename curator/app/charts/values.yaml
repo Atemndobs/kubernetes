@@ -1,2 +1,7 @@
 kubernetesClusterDomain: cluster.local
 host: app.curator.atemkeng.eu
+image:
+  repository: atemndobs/music-player
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "v1.3.9"

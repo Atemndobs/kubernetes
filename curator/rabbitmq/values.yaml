@@ -1220,7 +1220,7 @@ networkPolicy:
 metrics:
   ## @param metrics.enabled Enable exposing RabbitMQ metrics to be gathered by Prometheus
   ##
-  enabled: false
+  enabled: true
   ## @param metrics.plugins Plugins to enable Prometheus metrics in RabbitMQ
   ##
   plugins: "rabbitmq_prometheus"

@@ -54,7 +54,7 @@ items:
             - sh
             - -c
             - pm2 start 'serve -s dist' --name vue --no-daemon && pm2 logs vue
-            image: atemndobs/music-player:v1.3.5
+            image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
             imagePullPolicy: Always
             name: curator-app
             ports:

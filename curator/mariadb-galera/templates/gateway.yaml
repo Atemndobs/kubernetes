@@ -5,6 +5,7 @@ metadata:
   namespace: {{ include "common.names.namespace" . | quote }}
   labels:
     app.kubernetes.io/name: {{ printf "%s-headless" (include "common.names.fullname" .) }}
+    app: {{ template "common.names.name" . }}
 spec:
   selector:
     istio: ingressgateway # use istio default controller
@@ -50,6 +51,7 @@ metadata:
   namespace: {{ include "common.names.namespace" . | quote }}
   labels:
     app.kubernetes.io/name: {{ printf "%s-headless" (include "common.names.fullname" .) }}
+    app: {{ template "common.names.name" . }}
 spec:
   hosts:
     - mariadb.curator.atemkeng.eu

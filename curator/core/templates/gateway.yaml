@@ -47,3 +47,12 @@ spec:
             host: {{ $fullName }}
             port:
               number: 8899
+    - match:
+        - uri:
+            prefix: /metrics
+      route:
+        - destination:
+            host: {{ $fullName }}
+            port:
+              number: 9253
+
