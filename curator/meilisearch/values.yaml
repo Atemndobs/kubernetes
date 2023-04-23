@@ -88,7 +88,7 @@ ingress:
   ## Secrets must be manually created in the namespace
   ##
   hosts:
-    - host: chart-example.local
+    - host: search.curator.atemkeng.eu
       paths:
         - path: /
           pathType: ImplementationSpecific

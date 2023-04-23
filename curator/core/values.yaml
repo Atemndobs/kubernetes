@@ -63,7 +63,7 @@ app:
   # If enabled, Kubernetes will periodically check the PHP-FPM
   # process to be alive and to serve FCGI requests.
   healthcheck:
-    enabled: true
+    enabled: false
     period: 5
 
   # For PHP-FPM, php-fpm_exporter is used. Enabling it will
@@ -71,7 +71,7 @@ app:
   # for Prometheus to scrape.
   # Read more: https://github.com/hipages/php-fpm_exporter
   exporter:
-    enabled: true
+    enabled: false
 
     image:
       repository: hipages/php-fpm_exporter
@@ -245,7 +245,7 @@ securityContext: {}
 service:
   type: ClusterIP
   port: 80
-  targetPort: 8900
+  targetPort: 8899
   annotations: {}
   # Set annotations for the service.
 

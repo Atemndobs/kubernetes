@@ -7,15 +7,16 @@ metadata:
     app.kubernetes.io/name: curator-app
     app.kubernetes.io/instance: curator-app
     helm.sh/chart: {{ include "curator-app.chart" . }}
+    app: curator-app
     app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
-    app: curator-app
+
 spec:
   selector:
     istio: ingressgateway
   servers:
   - hosts:
-    - app.curator.atemkeng.eu
+    - {{ .Values.host }}
     port:
       name: http
       number: 80
@@ -37,7 +38,7 @@ spec:
   gateways:
   - curator-app
   hosts:
-  - app.curator.atemkeng.eu
+    - {{ .Values.host }}
   http:
   - match:
     - uri:

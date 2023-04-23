@@ -37,6 +37,7 @@ items:
           app: curator-app
       template:
         metadata:
+          name: curator-app
           labels:
             app: curator-app
             app.kubernetes.io/name: curator-app

@@ -1,0 +1,41 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: curator-app
+  namespace: curator
+  labels:
+    app.kubernetes.io/name: curator-app
+    app.kubernetes.io/instance: curator-app
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - app.curator.atemkeng.eu
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: curator-app
+  namespace: curator
+  labels:
+    app.kubernetes.io/name: curator-app
+    app.kubernetes.io/instance: curator-app
+spec:
+  hosts:
+    - app.curator.atemkeng.eu
+  gateways:
+    - curator-app
+  http:
+    - match:
+        - uri:
+            prefix: /
+      route:
+        - destination:
+            host: curator-app
+            port:
+              number: 8080

@@ -46,4 +46,4 @@ spec:
         - destination:
             host: {{ $fullName }}
             port:
-              number: 8900
+              number: 8899

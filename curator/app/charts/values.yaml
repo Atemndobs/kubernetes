@@ -1,1 +1,2 @@
 kubernetesClusterDomain: cluster.local
+host: app.curator.atemkeng.eu
