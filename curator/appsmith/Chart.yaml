@@ -1,0 +1,24 @@
+annotations:
+  category: Application
+apiVersion: v2
+dependencies:
+- condition: redis.enabled
+  name: redis
+  repository: https://charts.bitnami.com/bitnami
+  version: 16.11.2
+- condition: mongodb.enabled
+  name: mongodb
+  repository: https://charts.bitnami.com/bitnami
+  version: 12.1.16
+description: Appsmith is an open source framework to build admin panels, CRUD apps
+  and workflows. Build everything you need, 10x faster.
+home: https://www.appsmith.com/
+icon: https://assets.appsmith.com/appsmith-icon.png
+maintainers:
+- email: tech@appsmith.com
+  name: Appsmith
+name: appsmith
+sources:
+- https://github.com/appsmithorg/appsmith
+type: application
+version: 2.0.0
