@@ -1,16 +1,16 @@
-{{- $fullName := .Values.app.name -}}
+{{- $fullName := include "appsmith.fullname" . -}}
 {{- $svcPort := .Values.service.port -}}
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
   name: {{ $fullName }}
-  namespace: curator
+  namespace: {{ include "appsmith.namespace" . }}
   labels:
-    {{- include "laravel.labels" . | nindent 4 }}
+    {{- include "appsmith.labels" . | nindent 4 }}
+  {{- with .Values.ingress.annotations }}
   annotations:
-    {{- with .Values.ingress.annotations }}
     {{- toYaml . | nindent 4 }}
-    {{- end }}
+  {{- end }}
 spec:
   selector:
     istio: ingressgateway # use istio default controller
@@ -20,22 +20,22 @@ spec:
         name: http
         protocol: HTTP
       hosts:
-        - core.curator.atemkeng.eu
+        - curator.atemkeng.eu
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: {{ $fullName }}
-  namespace: curator
+  namespace: {{ include "appsmith.namespace" . }}
   labels:
-    {{- include "laravel.labels" . | nindent 4 }}
+    {{- include "appsmith.labels" . | nindent 4 }}
+  {{- with .Values.ingress.annotations }}
   annotations:
-    {{- with .Values.ingress.annotations }}
     {{- toYaml . | nindent 4 }}
-    {{- end }}
+  {{- end }}
 spec:
   hosts:
-    - core.curator.atemkeng.eu
+    - curator.atemkeng.eu
   gateways:
     - {{ $fullName }}
   http:
@@ -46,13 +46,14 @@ spec:
         - destination:
             host: {{ $fullName }}
             port:
-              number: 8899
-    - match:
-        - uri:
-            prefix: /metrics
-      route:
-        - destination:
-            host: {{ $fullName }}
-            port:
-              number: 9253
+              number: 80
+
+{{/*    - match:*/}}
+{{/*        - uri:*/}}
+{{/*            prefix: /metrics*/}}
+{{/*      route:*/}}
+{{/*        - destination:*/}}
+{{/*            host: {{ $fullName }}*/}}
+{{/*            port:*/}}
+{{/*              number: 9253*/}}
 

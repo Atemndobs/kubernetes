@@ -37,7 +37,7 @@ items:
       name: curator-mood-extractor
       namespace: curator
     spec:
-      replicas: 1
+      replicas: 2
       selector:
         matchLabels:
           app: curator-mood-extractor

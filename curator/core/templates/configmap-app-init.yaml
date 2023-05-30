@@ -1,0 +1,9 @@
+{{- if not .Values.appInit.configName }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-app-init
+data:
+  laravel.conf: |
+{{- tpl .Values.appInit.content . | nindent 4 }}
+{{- end }}
