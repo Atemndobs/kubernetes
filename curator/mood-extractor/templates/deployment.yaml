@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: List
 metadata:
-  name: {{ include "charts.fullname" . }}-
+  name: {{ include "mood-extractor.fullname" . }}-
   labels:
-  {{- include "charts.labels" . | nindent 4 }}
+  {{- include "mood-extractor.labels" . | nindent 4 }}
 items:
   - apiVersion: v1
     kind: Service
@@ -37,7 +37,7 @@ items:
       name: curator-mood-extractor
       namespace: curator
     spec:
-      replicas: 2
+      replicas: 1
       selector:
         matchLabels:
           app: curator-mood-extractor
