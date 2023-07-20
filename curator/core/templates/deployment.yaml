@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
 #  name: {{ include "laravel.fullname" . }}
-  name: custom-core
+  name: curator-core
   labels:
     {{- include "laravel.labels" . | nindent 4 }}
 spec:
@@ -21,7 +21,7 @@ spec:
   template:
     metadata:
       {{- with .Values.podAnnotations }}
-      name: custom-core
+      name: curator-core
       annotations:
         {{- toYaml . | nindent 8 }}
       {{- end }}

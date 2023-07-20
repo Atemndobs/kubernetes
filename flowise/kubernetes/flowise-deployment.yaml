@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml
+    kompose.version: 1.28.0 (c4137012e)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: flowise
+  name: flowise
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: flowise
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose.yml
+      creationTimestamp: null
+      labels:
+        io.kompose.network/flowise-default: "true"
+        io.kompose.service: flowise
+    spec:
+      containers:
+        - args:
+            - /bin/sh
+            - -c
+            - sleep 3; flowise start
+          env:
+            - name: FLOWISE_PASSWORD
+              value: Atem1234
+            - name: FLOWISE_USERNAME
+              value: atemndobs
+            - name: PORT
+              value: "9999"
+          image: flowiseai/flowise
+          name: flowise
+          ports:
+            - containerPort: 3000
+          resources: {}
+          volumeMounts:
+            - mountPath: /root/.flowise
+              name: flowise-claim0
+      restartPolicy: Always
+      volumes:
+        - name: flowise-claim0
+          persistentVolumeClaim:
+            claimName: flowise-claim0
+status: {}

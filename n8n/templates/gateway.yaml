@@ -1,0 +1,49 @@
+{{- $fullName := include "n8n.fullname" . -}}
+{{- $svcPort := .Values.service.port -}}
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: {{ $fullName }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "n8n.labels" . | nindent 4 }}
+  {{- with .Values.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - n8n.curator.atemkeng.eu
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ $fullName }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "n8n.labels" . | nindent 4 }}
+  {{- with .Values.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  hosts:
+    - n8n.curator.atemkeng.eu
+  gateways:
+    - {{ $fullName }}
+  http:
+    - match:
+        - uri:
+            prefix: /
+      route:
+        - destination:
+            host: {{ $fullName }}
+            port:
+              number: {{ $svcPort }}
