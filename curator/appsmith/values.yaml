@@ -65,7 +65,7 @@ image:
   pullPolicy: IfNotPresent
   pullSecrets: ""
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "v1.9.26"
+  tag: "v1.9.31"
 ## ServiceAccount
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ##
