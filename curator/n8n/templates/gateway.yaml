@@ -1,0 +1,50 @@
+
+{{- $fullName := .Values.name -}}
+{{- $svcPort := .Values.service.port -}}
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name:  {{ $fullName }}
+  namespace: curator
+  labels:
+    {{- include "n8n.labels" . | nindent 4 }}
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - n8n.curator.atemkeng.eu
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ $fullName }}
+  namespace: curator
+  labels:
+    {{- include "n8n.labels" . | nindent 4 }}
+spec:
+  hosts:
+    - n8n.curator.atemkeng.eu
+  gateways:
+    - {{ $fullName }}
+  http:
+    - match:
+        - uri:
+            prefix: /
+      route:
+        - destination:
+            host: {{ $fullName }}
+            port:
+              number: {{ $svcPort }}
+#    - match:
+#        - uri:
+#            prefix: /webhook
+#      route:
+#        - destination:
+#            host: {{ $fullName }}-webhooks
+#            port:
+#              number: {{ $svcPort }}

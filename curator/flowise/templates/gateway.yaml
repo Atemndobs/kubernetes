@@ -1,0 +1,66 @@
+
+{{- $fullName := .Values.name -}}
+{{- $svcPort := .Values.service.ports.http -}}
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: {{ include "flowise.fullname" . }}
+  namespace: curator
+  labels:
+    {{- include "flowise.labels" . | nindent 4 }}
+      {{- if .Values.commonLabels }}
+      {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+      {{- end }}
+  {{- if or .Values.ingress.annotations .Values.commonAnnotations }}
+  annotations:
+    {{- if .Values.ingress.annotations }}
+      {{- include "common.tplvalues.render" ( dict "value" .Values.ingress.annotations "context" $ ) | nindent 4 }}
+      {{- end }}
+      {{- if .Values.commonAnnotations }}
+      {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+      {{- end }}
+  {{- end }}
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - flowise.atemkeng.eu
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ $fullName }}
+  namespace: curator
+  labels:
+    {{- include "flowise.labels" . | nindent 4 }}
+      {{- if .Values.commonLabels }}
+      {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+      {{- end }}
+  {{- if or .Values.ingress.annotations .Values.commonAnnotations }}
+  annotations:
+    {{- if .Values.ingress.annotations }}
+      {{- include "common.tplvalues.render" ( dict "value" .Values.ingress.annotations "context" $ ) | nindent 4 }}
+      {{- end }}
+      {{- if .Values.commonAnnotations }}
+      {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+      {{- end }}
+  {{- end }}
+spec:
+  hosts:
+    - flowise.atemkeng.eu
+  gateways:
+    - {{ $fullName }}
+  http:
+    - match:
+        - uri:
+            prefix: /
+      route:
+        - destination:
+            host: {{ $fullName }}
+            port:
+              number: {{ $svcPort }}
