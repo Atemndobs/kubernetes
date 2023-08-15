@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "flowise.name" -}}
+{{- define "python-fastapi-postgres.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -10,7 +10,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "flowise.fullname" -}}
+{{- define "python-fastapi-postgres.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -26,16 +26,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "flowise.chart" -}}
+{{- define "python-fastapi-postgres.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "flowise.labels" -}}
-helm.sh/chart: {{ include "flowise.chart" . }}
-{{ include "flowise.selectorLabels" . }}
+{{- define "python-fastapi-postgres.labels" -}}
+helm.sh/chart: {{ include "python-fastapi-postgres.chart" . }}
+{{ include "python-fastapi-postgres.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -45,17 +45,17 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "flowise.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "flowise.name" . }}
+{{- define "python-fastapi-postgres.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "python-fastapi-postgres.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "flowise.serviceAccountName" -}}
+{{- define "python-fastapi-postgres.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "flowise.fullname" .) .Values.serviceAccount.name }}
+{{- default (include "python-fastapi-postgres.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
