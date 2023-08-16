@@ -7,10 +7,10 @@ replicaCount: 1
 
 
 image:
-  repository: archish27/python-fastapi-postgres
+  repository: atemndobs/fastapi
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "latest"
+  tag: "v1.0"
 
 imagePullSecrets: []
 nameOverride: ""
