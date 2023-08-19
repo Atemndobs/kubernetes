@@ -6,10 +6,7 @@ metadata:
   name: {{ $fullName }}
   labels:
     {{- include "python-fastapi-postgres.labels" . | nindent 4 }}
-  {{- with .Values.ingress.annotations }}
-  annotations:
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
+
 spec:
   selector:
     istio: ingressgateway # use istio default controller
@@ -27,10 +24,7 @@ metadata:
   name: {{ $fullName }}
   labels:
     {{- include "python-fastapi-postgres.labels" . | nindent 4 }}
-  {{- with .Values.ingress.annotations }}
-  annotations:
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
+
 spec:
   hosts:
     - fastapi.curator.atemkeng.eu
