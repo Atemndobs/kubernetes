@@ -1,0 +1,24 @@
+# templates/virtualservice.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ .Values.virtualService.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "charts.labels" . | nindent 4 }}
+  annotations:
+    {{- toYaml .Values.virtualService.annotations | nindent 4 }}
+spec:
+  hosts:
+    - "{{ .Values.virtualService.host }}"
+  gateways:
+    - "{{ .Values.virtualService.gateway }}"
+  http:
+    - match:
+        - uri:
+            prefix: /
+      route:
+        - destination:
+            host: {{ .Values.virtualService.service.name }}
+            port:
+              number: {{ .Values.virtualService.service.port }}
