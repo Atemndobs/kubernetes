@@ -4,7 +4,7 @@ annotations:
     \   - name: GitHub PR\n      url: https://github.com/8gears/n8n-helm-chart/pull/46
     \         \n"
 apiVersion: v2
-appVersion: 1.24.1
+appVersion: 1.25.1
 dependencies:
 - condition: redis.enabled
   name: redis
