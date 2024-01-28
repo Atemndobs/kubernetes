@@ -10,7 +10,7 @@ image:
   repository: atemndobs/fastapi
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "v1.8"
+  tag: "v1.11"
 
 imagePullSecrets: []
 nameOverride: "fastapi"
