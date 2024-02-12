@@ -33,7 +33,7 @@ metadata:
   name: formbricks-config
   namespace: curator
 data:
-  WEBAPP_URL: "http://form.curator.atemkeng.eu"
+  WEBAPP_URL: "https://form.curator.atemkeng.eu"
   DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/formbricks?schema=public"
   NEXTAUTH_SECRET: "4fe438ba52b3c5916ae4bf994b0a84a0d763d58da4049d55d2734037b5ded9a1"
   NEXTAUTH_URL: "http://localhost:3000"

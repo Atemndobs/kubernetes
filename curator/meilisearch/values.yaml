@@ -14,7 +14,7 @@ name: meilisearch
 
 image:
   repository: getmeili/meilisearch
-  tag: ""
+  tag: "v1.6"
   pullPolicy: IfNotPresent
 
 # This value will be ignored if Autoscaling is enabled
