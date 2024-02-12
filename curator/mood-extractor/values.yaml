@@ -1,2 +1,2 @@
 kubernetesClusterDomain: cluster.local
-replicaCount: 10
+replicaCount: 1

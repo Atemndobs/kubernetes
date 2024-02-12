@@ -1,0 +1,167 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: curator
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pvc
+  namespace: curator
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: uploads-pvc
+  namespace: curator
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: formbricks-config
+  namespace: curator
+data:
+  WEBAPP_URL: "http://form.curator.atemkeng.eu"
+  DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/formbricks?schema=public"
+  NEXTAUTH_SECRET: "4fe438ba52b3c5916ae4bf994b0a84a0d763d58da4049d55d2734037b5ded9a1"
+  NEXTAUTH_URL: "http://localhost:3000"
+  ENCRYPTION_KEY: "dd49e185d6e1dc7c680c9d303700da7a6f6992fc639585c6ddede67905892641"
+  POSTGRES_PASSWORD: "postgres"
+  EMAIL_VERIFICATION_DISABLED: "1"
+  PASSWORD_RESET_DISABLED: "1"
+  ONBOARDING_DISABLED: "1"
+  # Add more environment variables as needed
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  namespace: curator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:15-alpine
+          env:
+            - name: POSTGRES_PASSWORD
+              value: "postgres"
+          volumeMounts:
+            - name: postgres-storage
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: postgres-storage
+          persistentVolumeClaim:
+            claimName: postgres-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  namespace: curator
+spec:
+  type: ClusterIP
+  selector:
+    app: postgres
+  ports:
+    - port: 5432
+      targetPort: 5432
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: formbricks
+  namespace: curator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: formbricks
+  template:
+    metadata:
+      labels:
+        app: formbricks
+    spec:
+      containers:
+        - name: formbricks
+          image: ghcr.io/formbricks/formbricks:latest
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: formbricks-config
+          volumeMounts:
+            - name: uploads
+              mountPath: /home/nextjs/apps/web/uploads/
+      volumes:
+        - name: uploads
+          persistentVolumeClaim:
+            claimName: uploads-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: formbricks
+  namespace: curator
+spec:
+  type: ClusterIP
+  selector:
+    app: formbricks
+  ports:
+    - port: 3300
+      targetPort: 3000
+---
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: formbricks-gateway
+  namespace: curator
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - "form.curator.atemkeng.eu"
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: formbricks-virtualservice
+  namespace: curator
+spec:
+  hosts:
+    - "form.curator.atemkeng.eu"
+  gateways:
+    - formbricks-gateway
+  http:
+    - match:
+        - uri:
+            prefix: "/"
+      route:
+        - destination:
+            host: formbricks.curator.svc.cluster.local
+            port:
+              number: 3300
