@@ -65,7 +65,7 @@ image:
   pullPolicy: IfNotPresent
   pullSecrets: ""
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "v1.9.44"
+  tag: "v1.14"
 ## ServiceAccount
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 ##
@@ -169,7 +169,7 @@ ingress:
   secrets: []
   ## @param ingress.certManager Enable ingress to use TLS certificates provided by Cert Manager
   ##
-  certManager: false
+  certManager: true
   ## @param ingress.certManagerTls Specify the TLS secret created by Cert Manager
   ## e.g:
   ## certManagerTls:
@@ -181,7 +181,7 @@ ingress:
   ## e.g:
   ## className: "nginx"
   ##
-  className: "nginx"
+  className: "traefik"
 
 resources:
   # We usually recommend not to specify default resources and to leave this as a conscious
@@ -269,7 +269,7 @@ autoupdate:
   ##
   scheduler: "0 * * * *"
 
-secretName: ""
+secretName: "appsmith-tls"
 
 applicationConfig:
   APPSMITH_OAUTH2_GOOGLE_CLIENT_ID: ""
