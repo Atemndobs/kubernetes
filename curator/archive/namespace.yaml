@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: curator
+  labels:
+    name: curator
+    app: curator
+    istio-injection: enabled
+    app.kubernetes.io/name: curator
+    app.kubernetes.io/instance: curator

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PHPUnit">
+    <option name="directories">
+      <list>
+        <option value="$PROJECT_DIR$/packages/studio/laravel-totem/tests" />
+        <option value="$PROJECT_DIR$/packages/illuminated/console-mutex/tests" />
+        <option value="$PROJECT_DIR$/packages/tcg/voyager/tests" />
+        <option value="$PROJECT_DIR$/tests" />
+      </list>
+    </option>
+  </component>
+</project>

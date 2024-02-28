@@ -1,7 +1,7 @@
 
 {{- $fullName := .Values.name -}}
 {{- $svcPort := .Values.service.port -}}
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: gateway.networking.k8s.io/v1beta1
 kind: Gateway
 metadata:
   name: {{ $fullName }}
@@ -13,18 +13,17 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  selector:
-    istio: ingressgateway # use istio default controller
-  servers:
-    - port:
-        number: 80
-        name: http
-        protocol: HTTP
-      hosts:
-        - search.curator.atemkeng.eu
+  gatewayClassName: istio
+  listeners:
+    - name: http
+      port: 80
+      protocol: HTTP
+      allowedRoutes:
+        namespaces:
+          from: Same
 ---
-apiVersion: networking.istio.io/v1alpha3
-kind: VirtualService
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
 metadata:
   name: {{ $fullName }}
   namespace: curator
@@ -35,16 +34,16 @@ metadata:
     {{- toYaml . | nindent 4 }}
     {{- end }}
 spec:
-  hosts:
+  parentRefs:
+    - name: {{ $fullName }}
+      sectionName: http
+  hostnames:
     - search.curator.atemkeng.eu
-  gateways:
-    - {{ $fullName }}
-  http:
-    - match:
-        - uri:
-            prefix: /
-      route:
-        - destination:
-            host: {{ $fullName }}
-            port:
-              number: {{ $svcPort }}
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: {{ $fullName }}
+          port: {{ $svcPort }}

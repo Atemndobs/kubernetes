@@ -1,0 +1,121 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: convertigo
+  namespace: curator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: convertigo
+  template:
+    metadata:
+      labels:
+        app: convertigo
+    spec:
+      containers:
+        - name: convertigo
+          image: convertigo
+          ports:
+            - containerPort: 28080
+          env:
+            - name: JAVA_OPTS
+              value: "-Dconvertigo.engine.billing.enabled=true -Dconvertigo.engine.billing.persistence.jdbc.username=c8oAnalytics -Dconvertigo.engine.billing.persistence.jdbc.password=c8oAnalytics -Dconvertigo.engine.billing.persistence.jdbc.url=jdbc:mysql://maxscale-masteronly.curator.svc.cluster.local:3306/c8oAnalytics -Dconvertigo.engine.fullsync.couch.username=admin -Dconvertigo.engine.fullsync.couch.password=fullsyncpassword"
+          volumeMounts:
+            - name: workspace
+              mountPath: "/workspace"
+      volumes:
+        - name: workspace
+          persistentVolumeClaim:
+            claimName: workspace-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: convertigo
+  namespace: curator
+spec:
+  type: NodePort
+  ports:
+    - port: 28080
+      targetPort: 28080
+  selector:
+    app: convertigo
+---
+# CouchDB Deployment and Service (similar structure to Convertigo)
+# ...
+
+# Persistent Volume Claim for Workspace
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: workspace-pvc
+  namespace: curator
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+# Persistent Volume Claim for Analytics (if needed)
+# ...
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: couchdb
+  namespace: curator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: couchdb
+  template:
+    metadata:
+      labels:
+        app: couchdb
+    spec:
+      containers:
+        - name: couchdb
+          image: couchdb:2.3.1
+          ports:
+            - containerPort: 5984
+          env:
+            - name: COUCHDB_USER
+              value: "admin"
+            - name: COUCHDB_PASSWORD
+              value: "fullsyncpassword"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: couchdb
+  namespace: curator
+spec:
+  type: ClusterIP
+  ports:
+    - port: 5984
+      targetPort: 5984
+  selector:
+    app: couchdb
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: convertigo-ingress
+  namespace: curator
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - host: pwa.curator.atemkeng.eu
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: convertigo
+                port:
+                  number: 28080
