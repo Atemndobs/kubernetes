@@ -48,10 +48,6 @@ Selector labels
 {{- define "appsmith.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "appsmith.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
-app: {{ include "appsmith.name" . }}
-{{- end }}
-
-{{/*
 {{- end }}
 
 {{/*

@@ -99,7 +99,6 @@ ingress:
     - secretName: change-to-your-tls
       hosts:
         - search.curator.atemkeng.eu
-        - www.search.curator.atemkeng.eu
 
 persistence:
   enabled: true

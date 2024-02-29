@@ -1,0 +1,33 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: appsmith-ingress
+  namespace: curator
+  labels:
+    app: appsmith
+    app.kubernetes.io/instance: appsmith
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: appsmith
+    app.kubernetes.io/part-of: appsmith
+    helm.sh/chart: appsmith-2.0.0
+  annotations:
+    kubernetes.io/ingress.class: "traefik"
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    cert-manager.io/cluster-issuer: "letsencrypt-prod" # If you're using cert-manager for TLS certificates
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: curator.atemkeng.eu
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: appsmith
+                port:
+                  number: 7700
+  tls: # Remove this section if you're not using HTTPS
+    - hosts:
+        - curator.atemkeng.eu
+      secretName: appsmith-tls

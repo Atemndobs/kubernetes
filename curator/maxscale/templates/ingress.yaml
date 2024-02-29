@@ -1,0 +1,31 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "maxscale.fullname" . }}-masteronly
+  namespace: curator
+  labels:
+    app.kubernetes.io/name: {{ include "maxscale.name" . }}
+    helm.sh/chart: {{ include "maxscale.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  annotations:
+    kubernetes.io/ingress.class: "traefik"
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: maxscale.curator.atemkeng.eu
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "maxscale.fullname" . }}-masteronly
+                port:
+                  number: 8989
+  tls:
+    - hosts:
+        - maxscale.curator.atemkeng.eu
+      secretName: maxscale-tls

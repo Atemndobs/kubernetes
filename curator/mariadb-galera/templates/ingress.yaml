@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mariadb-galera-headless
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels:
+    app.kubernetes.io/name: mariadb-galera-headless
+    app: {{ template "common.names.name" . }}
+  annotations:
+    kubernetes.io/ingress.class: "traefik"
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: mariadb.curator.atemkeng.eu
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ printf "%s-headless" (include "common.names.fullname" .) }}
+                port:
+                  number: 80
+  tls:
+    - hosts:
+        - mariadb.curator.atemkeng.eu
+      secretName: mariadb-galera-tls

@@ -1,10 +1,17 @@
+{{- $fullName := include "appsmith.fullname" . -}}
+{{- $svcPort := .Values.service.port -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: appsmith-ingress
+  name: {{ $fullName }}
   namespace: {{ include "appsmith.namespace" . }}
   labels:
-    {{- include "appsmith.labels" . | nindent 4 }}
+    app: {{ $fullName }}
+    app.kubernetes.io/instance: {{ $fullName }}
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: {{ $fullName }}
+    app.kubernetes.io/part-of: {{ $fullName }}
+    helm.sh/chart: {{ $fullName }}-2.0.7
   annotations:
     kubernetes.io/ingress.class: "traefik"
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
@@ -12,17 +19,17 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - host: "{{ .Values.applicationConfig.APPSMITH_CUSTOM_DOMAIN }}"
+    - host: curator.atemkeng.eu
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: {{ include "appsmith.fullname" . }}
+                name: {{ $fullName }}
                 port:
-                  number: {{ .Values.service.port }}
+                  number: {{ $svcPort }}
   tls:
     - hosts:
-        - "{{ .Values.applicationConfig.APPSMITH_CUSTOM_DOMAIN }}"
+        - curator.atemkeng.eu
       secretName: appsmith-tls
