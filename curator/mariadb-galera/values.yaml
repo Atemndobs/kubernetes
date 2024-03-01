@@ -310,7 +310,7 @@ galera:
     user: mariabackup
     ## @param galera.mariabackup.password MariaBackup password. Password is ignored if existingSecret is specified.
     ##
-    password: ""
+    password: "mage"
     ## @param galera.mariabackup.forcePassword Option to force users to specify a password. That is required for 'helm upgrade' to work properly.
     ## If it is not force, a random password will be generated.
     ##
@@ -514,7 +514,7 @@ initdbScriptsConfigMap: ""
 extraFlags: ""
 ## @param replicaCount Desired number of cluster nodes
 ##
-replicaCount: 1
+replicaCount: 3
 ## @param updateStrategy.type updateStrategy for MariaDB Master StatefulSet
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
 ##
