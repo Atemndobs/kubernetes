@@ -1,0 +1,32 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: argocd-server-ingress
+  namespace: argocd # Ensure this matches the namespace where Argo CD is installed
+  labels:
+    app: argocd-server
+    app.kubernetes.io/instance: argocd-server
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: argocd-server
+    app.kubernetes.io/part-of: argocd-server
+  annotations:
+    kubernetes.io/ingress.class: "traefik"
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  ingressClassName: traefik # Ensure your Traefik Ingress class matches here
+  rules:
+    - host: devops.atemkeng.eu # Change this to your domain
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: argocd-server
+                port:
+                  number: 80 # Check if you need HTTP (80) or HTTPS (443)
+  tls: # Remove this section if not using HTTPS
+    - hosts:
+        - devops.atemkeng.eu # Change this to your domain
+      secretName: argocd-secret-tls # Ensure you have a TLS secret for your domain
