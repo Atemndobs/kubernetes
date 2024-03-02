@@ -1,1 +1,3 @@
 /istio/
+curator/core/.env
+curator/core/templates/env-secret.yaml
