@@ -38,7 +38,7 @@ config:
   mysql:
 #    integration:
     database: mage
-    host: 'maxscale-masteronly.curator.svc.cluster.local'
+    host: mariadb-galera.curator.svc.cluster.local
     password: mage
     port: 3306
     url: ''
