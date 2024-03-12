@@ -1,5 +1,4 @@
 {{- $fullName := include "laravel.fullname" . -}}
-{{- $svcPort := .Values.service.port -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -23,7 +22,7 @@ spec:
               service:
                 name: {{ $fullName }}
                 port:
-                  number: {{ $svcPort }}
+                  number: 8899
   tls: # Remove this section if you're not using HTTPS
     - hosts:
         - core.curator.atemkeng.eu
