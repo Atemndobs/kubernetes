@@ -3,8 +3,8 @@ nameOverride: admin
 images:
   directus:
     repository: atemndobs/directus
-    tag: v1.3
-#    tag: Base Image : v10.9.3
+    tag: v1.7
+#    tag: Base Image : v10.10
 
 host: admin.curator.atemkeng.eu
 

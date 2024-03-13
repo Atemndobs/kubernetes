@@ -3,6 +3,13 @@ kind: IPAddressPool
 metadata:
   name: metallb-ip-address-pool
   namespace: metallb-system
+  labels:
+    app: metallb
+    component: controller
+    release: metallb
+  annotations:
+    meta.helm.sh/release-name: metallb
+    meta.helm.sh/release-namespace: metallb-system
 spec:
   addresses:
   - 5.199.139.35/32

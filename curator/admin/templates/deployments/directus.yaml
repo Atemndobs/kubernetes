@@ -63,6 +63,7 @@ spec:
               mountPath: '/directus/uploads'
               subPath: uploads
           env:
+
 {{/*            - name: DB_CLIENT*/}}
 {{/*              value: pg*/}}
 {{/*            - name: LOG_LEVEL*/}}
@@ -106,6 +107,12 @@ spec:
 {{/*                secretKeyRef:*/}}
 {{/*                  name: {{ printf "%s%s" (include "directus.fullname" .) ((empty .Values.config.postgres.integration) | ternary "" "-externaldb") }}*/}}
 {{/*                  key: POSTGRES_PASSWORD*/}}
+            - name: REDIS_HOST
+              value: redis-master.curator.svc.cluster.local
+            - name: REDIS_PORT
+              value: "6379"
+            - name: REDIS_PASSWORD
+              value: mage
             - name: DB_CLIENT
               value: mysql
             - name: LOG_LEVEL

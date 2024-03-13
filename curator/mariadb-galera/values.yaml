@@ -380,6 +380,7 @@ mariadbConfiguration: |-
   socket=/opt/bitnami/mariadb/tmp/mysql.sock
   pid_file=/opt/bitnami/mariadb/tmp/mysqld.pid
   bind_address=0.0.0.0
+  proxy_protocol_networks=10.42.0.0/16
 
   ## Character set
   ##
@@ -878,7 +879,7 @@ metrics:
     enabled: false
     ## @param metrics.serviceMonitor.namespace Optional namespace which Prometheus is running in
     ##
-    namespace: "default"
+    namespace: "curator"
     ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
     ##
     jobLabel: ""
