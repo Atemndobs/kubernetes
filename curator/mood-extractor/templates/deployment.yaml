@@ -53,7 +53,7 @@ items:
                 - sh
                 - -c
                 - pm2 start dist/main.js --name nest --no-daemon && pm2 logs nest
-              image: atemndobs/nestjs_api_prod:v1.25
+              image: atemndobs/nestjs_api_prod:
               imagePullPolicy: Always
               name: curator-mood-extractor
               ports:
