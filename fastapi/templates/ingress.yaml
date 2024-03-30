@@ -1,0 +1,31 @@
+{{- $fullName := include "python-fastapi-postgres.fullname" . -}}
+{{- $svcPort := .Values.service.port -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ $fullName }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "python-fastapi-postgres.labels" . | nindent 4 }}
+  annotations:
+    kubernetes.io/ingress.class: "traefik"
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    # cert-manager.io/cluster-issuer: "letsencrypt-prod" # Adjust this according to your cert-manager setup
+spec:
+  rules:
+    - host: {{ .Values.host }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name:  {{ $fullName }}
+                port:
+                  number: 80
+  # Uncomment the following section if you have TLS certificates set up
+  tls:
+    - hosts:
+        - {{ .Values.host }}
+      secretName:  {{ $fullName }}-tls
