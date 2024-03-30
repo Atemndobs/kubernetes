@@ -25,14 +25,20 @@ spec:
                 name:  {{ $fullName }}
                 port:
                   number: 80
-
           - path: /autogen  # Specify the new path here
             pathType: Prefix  # Or another pathType as per your requirement
             backend:
               service:
-                name:  {{ $fullName }}
+                name: autogen
                 port:
                   number: 8081  # Target port inside the container
+          - path: /debug  # Specify the new path here
+            pathType: Prefix  # Or another pathType as per your requirement
+            backend:
+              service:
+                name:  debug
+                port:
+                  number: 9229  # Target port inside the container
   # Uncomment the following section if you have TLS certificates set up
   tls:
     - hosts:
