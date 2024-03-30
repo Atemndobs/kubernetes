@@ -13,6 +13,7 @@ metadata:
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
     # cert-manager.io/cluster-issuer: "letsencrypt-prod" # Adjust this according to your cert-manager setup
 spec:
+  ingressClassName: traefik
   rules:
     - host: {{ .Values.host }}
       http:
