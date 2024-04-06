@@ -25,8 +25,9 @@ app:
   image:
     registry: docker.io
     repository: atemndobs/laravel-php-fpm
-    tag: v1.8.9
+    tag: v1.9.0
     pullPolicy: IfNotPresent
+
 
   # Specify the Secret name to pull the .env file from.
   # If not specified, it defaults to "{release name}-env". It should
