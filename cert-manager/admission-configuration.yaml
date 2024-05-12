@@ -1,0 +1,9 @@
+apiVersion: apiserver.config.k8s.io/v1
+kind: AdmissionConfiguration
+plugins:
+  - name: ValidatingAdmissionWebhook
+    configuration:
+      apiVersion: apiserver.config.k8s.io/v1
+      kind: WebhookAdmission
+      kubeConfigFile: "/etc/rancher/k3s/k3s.yaml"
+      timeoutSeconds: 30  # Increase this from the default as needed
