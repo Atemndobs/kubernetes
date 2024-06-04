@@ -113,13 +113,7 @@ spec:
           env:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          lifecycle:
-            postStart:
-              exec:
-                command:
-                  - /bin/sh
-                  - -c
-                  - cd /var/www/html && sh app_deploy.sh
+
         {{- if .Values.scheduler.enabled }}
         - name: scheduler
           securityContext:
