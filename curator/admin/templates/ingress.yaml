@@ -11,11 +11,12 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app: {{ template "directus.fullname" . }}
   annotations:
-    kubernetes.io/ingress.class: "traefik"
+{{/*    kubernetes.io/ingress.class: "traefik"*/}}
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
     # cert-manager.io/cluster-issuer: "letsencrypt-prod" # Adjust this according to your cert-manager setup
 spec:
+  ingressClassName: traefik
   rules:
     - host: {{ .Values.host }}
       http:
